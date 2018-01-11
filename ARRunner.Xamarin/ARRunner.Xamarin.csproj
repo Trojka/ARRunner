@@ -89,6 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="SpatialMapping\" />
+    <Folder Include="SpatialQuerying\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -105,6 +108,14 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="SpatialMapping\SpatialStore.cs" />
+    <Compile Include="SpatialMapping\SpatialObject.cs" />
+    <Compile Include="SpatialQuerying\PlaneQuery.cs" />
+    <Compile Include="SpatialQuerying\SpatialQuerying.cs" />
+    <Compile Include="SpatialMapping\Plane.cs" />
+    <Compile Include="SpatialMapping\ISpatialStore.cs" />
+    <Compile Include="Util\EventArgs.cs" />
+    <Compile Include="SpatialQuerying\SpatialQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
