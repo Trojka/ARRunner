@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Foundation;
 
 namespace ARRunner.Xamarin.SpatialMapping
 {
-    public class SpatialStore<T> : ISpatialStore
+    public class SpatialStore : ISpatialStore
     {
-        Dictionary<T, SpatialObject> _knownObjects = new Dictionary<T, SpatialObject>();
+        Dictionary<NSUuid, SpatialObject> _knownObjects = new Dictionary<NSUuid, SpatialObject>();
 
         public event EventHandler<EventArgs> StoreChangedEvent; 
 
-        public IEnumerable<SpatialObject> KnownObjects { get { return _knownObjects.Values; } }
+        public IEnumerable<KeyValuePair<NSUuid, SpatialObject>> KnownObjects { get { return _knownObjects; } }
 
-        public void Register(T id, SpatialObject spatialObject)
+        public void Register(NSUuid id, SpatialObject spatialObject)
         {
             if(!_knownObjects.ContainsKey(id))
             {
@@ -24,7 +25,7 @@ namespace ARRunner.Xamarin.SpatialMapping
             HandleStoreChanged();
         }
 
-        public void Remove(T id)
+        public void Remove(NSUuid id)
         {
             if (!_knownObjects.ContainsKey(id))
                 return;

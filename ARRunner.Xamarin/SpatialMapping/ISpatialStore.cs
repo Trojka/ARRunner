@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Foundation;
 
 namespace ARRunner.Xamarin.SpatialMapping
 {
@@ -7,6 +8,6 @@ namespace ARRunner.Xamarin.SpatialMapping
     {
         event EventHandler<EventArgs> StoreChangedEvent; 
 
-        IEnumerable<SpatialObject> KnownObjects { get; }
+        IEnumerable<KeyValuePair<NSUuid, SpatialObject>> KnownObjects { get; }
     }
 }

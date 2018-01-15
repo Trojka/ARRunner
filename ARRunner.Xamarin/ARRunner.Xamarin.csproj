@@ -111,11 +111,11 @@
     <Compile Include="SpatialMapping\SpatialStore.cs" />
     <Compile Include="SpatialMapping\SpatialObject.cs" />
     <Compile Include="SpatialQuerying\PlaneQuery.cs" />
-    <Compile Include="SpatialQuerying\SpatialQuerying.cs" />
+    <Compile Include="SpatialQuerying\SpatialQL.cs" />
     <Compile Include="SpatialMapping\Plane.cs" />
     <Compile Include="SpatialMapping\ISpatialStore.cs" />
     <Compile Include="Util\EventArgs.cs" />
-    <Compile Include="SpatialQuerying\SpatialQuery.cs" />
+    <Compile Include="SpatialQuerying\ISpatialQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

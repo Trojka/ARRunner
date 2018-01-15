@@ -3,23 +3,24 @@ using System.Linq;
 using System.Collections.Generic;
 using ARRunner.Xamarin.SpatialMapping;
 using ARRunner.Xamarin.Util;
+using Foundation;
 
 namespace ARRunner.Xamarin.SpatialQuerying
 {
-    public class SpatialQuerying
+    public class SpatialQL
     {
-        Dictionary<int, PlaneQuery> _planeQueries = new Dictionary<int, PlaneQuery>();
+        Dictionary<int, Func<Plane, bool>> _planeQueries = new Dictionary<int, Func<Plane, bool>>();
         ISpatialStore _store;
 
-        public event EventHandler<EventArgs<(int queryId, SpatialObject o)>> QueryFulfilled;
+        public event EventHandler<EventArgs<(int queryId, NSUuid spatialObjectId)>> QueryFulfilled;
 
-        public SpatialQuerying(ISpatialStore store)
+        public SpatialQL(ISpatialStore store)
         {
             _store = store;
             _store.StoreChangedEvent += Store_StoreChangedEvent;
         }
 
-        public int RegisterQuery(PlaneQuery query)
+        public int RegisterQuery(Func<Plane, bool> query)
         {
             int id = 0;
             if(_planeQueries.Keys.Count() > 0)
@@ -37,13 +38,14 @@ namespace ARRunner.Xamarin.SpatialQuerying
             if (QueryFulfilled == null)
                 return;
             
-            foreach(var spatialObject in _store.KnownObjects)
+            foreach(var spatialObjectEntry in _store.KnownObjects)
             {
                 foreach (var queryEntry in _planeQueries)
                 {
                     (var id, var query) = queryEntry;
-                    if (query.ObjectFullfillsQuery(spatialObject))
-                        QueryFulfilled(this, new EventArgs<(int queryId, SpatialObject o)>((id, spatialObject)));
+                    (var objectId, var spatialObject) = spatialObjectEntry;
+                    if (spatialObject is Plane && query(spatialObject as Plane))
+                        QueryFulfilled(this, new EventArgs<(int queryId, NSUuid spatialObjectId)>((id, objectId)));
                 }
             
             }

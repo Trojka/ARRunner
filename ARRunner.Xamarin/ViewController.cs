@@ -3,13 +3,27 @@ using System.Linq;
 using ARKit;
 using UIKit;
 using SceneKit;
+using ARRunner.Xamarin.SpatialMapping;
+using Foundation;
+using ARRunner.Xamarin.SpatialQuerying;
+using System.Collections.Generic;
 
 namespace ARRunner.Xamarin
 {
     public partial class ViewController : UIViewController
     {
+
         private class MyARSCNViewDelegate : ARSCNViewDelegate
         {
+            SpatialStore _spatialStore;
+            Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
+
+            public MyARSCNViewDelegate(SpatialStore spatialStore) 
+                : base()
+            {
+                _spatialStore = spatialStore;
+            }
+
             public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
                 if (!(anchor is ARPlaneAnchor))
@@ -33,6 +47,9 @@ namespace ARRunner.Xamarin
                 planeNode.EulerAngles = new SCNVector3((float)-Math.PI / 2, 0, 0);
 
                 node.AddChildNode(planeNode);
+
+                _planeStore.Add(anchor.Identifier, plane);
+                _spatialStore.Register(anchor.Identifier, new Plane(){ Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
             }
 
             public override void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
@@ -54,12 +71,35 @@ namespace ARRunner.Xamarin
                 var posZ = planeAnchor.Center.Z;
 
                 planeNode.Position = new SCNVector3(posX, posY, posZ);
+
+                //_planeStore.[anchor.Identifier] = plane);
+                _spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
+            }
+
+            public SCNPlane FindPlane(NSUuid id)
+            {
+                return _planeStore[id];
             }
         }
+
+        ISpatialStore _spatialStore;
+        SpatialQL _spatialQuerying;
+        int _queryId;
+        MyARSCNViewDelegate _viewDelegate;
 
         protected ViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
+        }
+
+        void _spatialQuerying_QueryFulfilled(object sender, Util.EventArgs<(int queryId, NSUuid spatialObjectId)> e)
+        {
+            (var queryId, var spatialObjectId) = e.Value;
+            if (queryId != _queryId)
+                return;
+
+            var scnPlane =_viewDelegate.FindPlane(spatialObjectId);
+            scnPlane.Materials.First().Diffuse.Contents = UIColor.Green;
         }
 
         public override void ViewDidLoad()
@@ -67,20 +107,28 @@ namespace ARRunner.Xamarin
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
 
-            sceneView.Delegate = new MyARSCNViewDelegate();
+            var spatialStore = new SpatialStore();
+            _spatialStore = spatialStore;
+
+            _spatialQuerying = new SpatialQL(_spatialStore);
+            _spatialQuerying.QueryFulfilled += _spatialQuerying_QueryFulfilled;
+            _queryId = _spatialQuerying.RegisterQuery(p => p.Width >= 0.8 && p.Height >= 0.3);
+
+            _viewDelegate = new MyARSCNViewDelegate(spatialStore);
+            sceneView.Delegate = _viewDelegate;
 
             sceneView.ShowsStatistics = true;
             sceneView.DebugOptions = ARSCNDebugOptions.ShowWorldOrigin | ARSCNDebugOptions.ShowFeaturePoints;
 
             var scene = new SCNScene();
 
-            var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
+            //var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
 
-            var boxNode = new SCNNode();
-            boxNode.Geometry = box;
-            boxNode.Position = new SCNVector3(0, 0, -0.5f);
+            //var boxNode = new SCNNode();
+            //boxNode.Geometry = box;
+            //boxNode.Position = new SCNVector3(0, 0, -0.5f);
 
-            scene.RootNode.AddChildNode(boxNode);
+            //scene.RootNode.AddChildNode(boxNode);
 
             sceneView.Scene = scene;
         }
@@ -111,24 +159,24 @@ namespace ARRunner.Xamarin
             if(touches.Count <= 0)
                 return;
 
-            var touch = (UITouch)touches.First();
-            var pointInScene = touch.LocationInView(sceneView);
+            //var touch = (UITouch)touches.First();
+            //var pointInScene = touch.LocationInView(sceneView);
 
-            var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
-            if (hitResult.Count() <= 0)
-                return;
+            //var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
+            //if (hitResult.Count() <= 0)
+            //    return;
 
-            var xPos = hitResult[0].WorldTransform.Column3.X;
-            var yPos = hitResult[0].WorldTransform.Column3.Y;
-            var zPos = hitResult[0].WorldTransform.Column3.Z;
+            //var xPos = hitResult[0].WorldTransform.Column3.X;
+            //var yPos = hitResult[0].WorldTransform.Column3.Y;
+            //var zPos = hitResult[0].WorldTransform.Column3.Z;
 
-            var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
+            //var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
 
-            var boxNode = new SCNNode();
-            boxNode.Geometry = box;
-            boxNode.Position = new SCNVector3(xPos, yPos, zPos);
+            //var boxNode = new SCNNode();
+            //boxNode.Geometry = box;
+            //boxNode.Position = new SCNVector3(xPos, yPos, zPos);
 
-            sceneView.Scene.RootNode.AddChildNode(boxNode);
+            //sceneView.Scene.RootNode.AddChildNode(boxNode);
         }
     }
 }
