@@ -117,5 +117,27 @@
     <Compile Include="Util\EventArgs.cs" />
     <Compile Include="SpatialQuerying\ISpatialQuery.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\candle_AO.png" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\candle_DIFFUSE.png" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\candle_METALLIC.png" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\candle_NORMAL.png" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\candle_ROUGHNESS.png" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\candle_SHADOW.png" />
+    <SceneKitAsset Include="Models.scnassets\candle\textures\flame_PARTICLE.png" />
+    <SceneKitAsset Include="Models.scnassets\sharedImages\environment.jpg" />
+    <SceneKitAsset Include="Models.scnassets\sharedImages\environment_blur.exr" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\candle.scn" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\candle_AO.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\candle_DIFFUSE.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\candle_METALLIC.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\candle_NORMAL.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\candle_ROUGHNESS.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\candle_SHADOW.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\candle\textures\flame_PARTICLE.png" />
+    <SceneKitAsset Include="Resources\Models.scnassets\sharedImages\environment.jpg" />
+    <SceneKitAsset Include="Resources\Models.scnassets\sharedImages\environment_blur.exr" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

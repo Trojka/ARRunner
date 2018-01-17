@@ -85,6 +85,7 @@ namespace ARRunner.Xamarin
         ISpatialStore _spatialStore;
         SpatialQL _spatialQuerying;
         int _queryId;
+        NSUuid _spatialObjectId;
         MyARSCNViewDelegate _viewDelegate;
 
         protected ViewController(IntPtr handle) : base(handle)
@@ -98,7 +99,10 @@ namespace ARRunner.Xamarin
             if (queryId != _queryId)
                 return;
 
-            var scnPlane =_viewDelegate.FindPlane(spatialObjectId);
+            _spatialQuerying.QueryFulfilled -= _spatialQuerying_QueryFulfilled;
+
+            _spatialObjectId = spatialObjectId;
+            var scnPlane =_viewDelegate.FindPlane(_spatialObjectId);
             scnPlane.Materials.First().Diffuse.Contents = UIColor.Green;
         }
 
@@ -123,12 +127,18 @@ namespace ARRunner.Xamarin
             var scene = new SCNScene();
 
             //var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
-
             //var boxNode = new SCNNode();
             //boxNode.Geometry = box;
-            //boxNode.Position = new SCNVector3(0, 0, -0.5f);
+            //boxNode.Position = new SCNVector3(0, 0, -1.0f);
 
             //scene.RootNode.AddChildNode(boxNode);
+
+            //SCNReferenceNode candle = new SCNReferenceNode(NSUrl.FromString(
+            //    NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/candle/candle.scn"));
+            //candle.Load();
+            //candle.Position = new SCNVector3(0, 0, -1.0f); //new SCNVector3(xPos, yPos, zPos);
+
+            //scene.RootNode.AddChildNode(candle);
 
             sceneView.Scene = scene;
         }
@@ -159,16 +169,16 @@ namespace ARRunner.Xamarin
             if(touches.Count <= 0)
                 return;
 
-            //var touch = (UITouch)touches.First();
-            //var pointInScene = touch.LocationInView(sceneView);
+            var touch = (UITouch)touches.First();
+            var pointInScene = touch.LocationInView(sceneView);
 
-            //var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
-            //if (hitResult.Count() <= 0)
-            //    return;
+            var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
+            if (hitResult.Count() <= 0)
+                return;
 
-            //var xPos = hitResult[0].WorldTransform.Column3.X;
-            //var yPos = hitResult[0].WorldTransform.Column3.Y;
-            //var zPos = hitResult[0].WorldTransform.Column3.Z;
+            var xPos = hitResult[0].WorldTransform.Column3.X;
+            var yPos = hitResult[0].WorldTransform.Column3.Y;
+            var zPos = hitResult[0].WorldTransform.Column3.Z;
 
             //var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
 
@@ -177,6 +187,27 @@ namespace ARRunner.Xamarin
             //boxNode.Position = new SCNVector3(xPos, yPos, zPos);
 
             //sceneView.Scene.RootNode.AddChildNode(boxNode);
+
+            SCNReferenceNode candle = new SCNReferenceNode(NSUrl.FromString(
+                NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/candle/candle.scn"));
+            candle.Load();
+            candle.Position = new SCNVector3(xPos, yPos, zPos); //new SCNVector3(0, 0, -1.0f); //
+
+            sceneView.Scene.RootNode.AddChildNode(candle);
+        }
+
+        [Action("leftclicked:")]
+        void LeftClicked(NSObject sender)
+        {
+            var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
+            scnPlane.Materials.First().Diffuse.Contents = UIColor.Orange;        
+        }
+
+        [Action("rightclicked:")]
+        void RightClicked(NSObject sender)
+        {
+            var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
+            scnPlane.Materials.First().Diffuse.Contents = UIColor.Magenta;        
         }
     }
 }
