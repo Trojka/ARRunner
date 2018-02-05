@@ -92,6 +92,7 @@
     <Folder Include="SpatialMapping\" />
     <Folder Include="SpatialQuerying\" />
     <Folder Include="Util\" />
+    <Folder Include="Game\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -110,12 +111,11 @@
     </Compile>
     <Compile Include="SpatialMapping\SpatialStore.cs" />
     <Compile Include="SpatialMapping\SpatialObject.cs" />
-    <Compile Include="SpatialQuerying\PlaneQuery.cs" />
     <Compile Include="SpatialQuerying\SpatialQL.cs" />
     <Compile Include="SpatialMapping\Plane.cs" />
     <Compile Include="SpatialMapping\ISpatialStore.cs" />
     <Compile Include="Util\EventArgs.cs" />
-    <Compile Include="SpatialQuerying\ISpatialQuery.cs" />
+    <Compile Include="Game\GamePlay.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />

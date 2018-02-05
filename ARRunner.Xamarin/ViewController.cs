@@ -12,7 +12,6 @@ namespace ARRunner.Xamarin
 {
     public partial class ViewController : UIViewController
     {
-
         private class MyARSCNViewDelegate : ARSCNViewDelegate
         {
             SpatialStore _spatialStore;
@@ -122,7 +121,8 @@ namespace ARRunner.Xamarin
             sceneView.Delegate = _viewDelegate;
 
             sceneView.ShowsStatistics = true;
-            sceneView.DebugOptions = ARSCNDebugOptions.ShowWorldOrigin | ARSCNDebugOptions.ShowFeaturePoints;
+            //sceneView.DebugOptions = ARSCNDebugOptions.ShowWorldOrigin | ARSCNDebugOptions.ShowFeaturePoints;
+            sceneView.DebugOptions = ARSCNDebugOptions.ShowFeaturePoints;
 
             var scene = new SCNScene();
 
@@ -180,20 +180,20 @@ namespace ARRunner.Xamarin
             var yPos = hitResult[0].WorldTransform.Column3.Y;
             var zPos = hitResult[0].WorldTransform.Column3.Z;
 
-            //var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
+            var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
 
-            //var boxNode = new SCNNode();
-            //boxNode.Geometry = box;
-            //boxNode.Position = new SCNVector3(xPos, yPos, zPos);
+            var boxNode = new SCNNode();
+            boxNode.Geometry = box;
+            boxNode.Position = new SCNVector3(xPos, yPos, zPos);
 
-            //sceneView.Scene.RootNode.AddChildNode(boxNode);
+            sceneView.Scene.RootNode.AddChildNode(boxNode);
 
-            SCNReferenceNode candle = new SCNReferenceNode(NSUrl.FromString(
-                NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/candle/candle.scn"));
-            candle.Load();
-            candle.Position = new SCNVector3(xPos, yPos, zPos); //new SCNVector3(0, 0, -1.0f); //
+            //SCNReferenceNode candle = new SCNReferenceNode(NSUrl.FromString(
+            //    NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/candle/candle.scn"));
+            //candle.Load();
+            //candle.Position = new SCNVector3(xPos, yPos, zPos); //new SCNVector3(0, 0, -1.0f); //
 
-            sceneView.Scene.RootNode.AddChildNode(candle);
+            //sceneView.Scene.RootNode.AddChildNode(candle);
         }
 
         [Action("leftclicked:")]
