@@ -12,113 +12,121 @@ namespace ARRunner.Xamarin
 {
     public partial class ViewController : UIViewController
     {
-        private class MyARSCNViewDelegate : ARSCNViewDelegate
-        {
-            SpatialStore _spatialStore;
-            Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
+        //private class MyARSCNViewDelegate : ARSCNViewDelegate
+        //{
+        //    SpatialStore _spatialStore;
+        //    Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
-            public MyARSCNViewDelegate(SpatialStore spatialStore) 
-                : base()
-            {
-                _spatialStore = spatialStore;
-            }
+        //    public MyARSCNViewDelegate(SpatialStore spatialStore) 
+        //        : base()
+        //    {
+        //        _spatialStore = spatialStore;
+        //    }
 
-            public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
-            {
-                if (!(anchor is ARPlaneAnchor))
-                    return;
+        //    public override void Update(ISCNSceneRenderer renderer, double timeInSeconds)
+        //    {
+        //        base.Update(renderer, timeInSeconds);
+        //    }
 
-                var planeAnchor = anchor as ARPlaneAnchor;
+        //    public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
+        //    {
+        //        if (!(anchor is ARPlaneAnchor))
+        //            return;
 
-                var width = planeAnchor.Extent.X;
-                var height = planeAnchor.Extent.Z;
+        //        var planeAnchor = anchor as ARPlaneAnchor;
 
-                var plane = new SCNPlane() { Width = width, Height = height};
-                plane.Materials.First().Diffuse.Contents = UIColor.Red;
+        //        var width = planeAnchor.Extent.X;
+        //        var height = planeAnchor.Extent.Z;
 
-                var planeNode = new SCNNode() { Geometry = plane };
+        //        var plane = new SCNPlane() { Width = width, Height = height};
+        //        plane.Materials.First().Diffuse.Contents = UIColor.Red;
 
-                var posX = planeAnchor.Center.X;
-                var posY = planeAnchor.Center.Y;
-                var posZ = planeAnchor.Center.Z;
+        //        var planeNode = new SCNNode() { Geometry = plane };
 
-                planeNode.Position = new SCNVector3(posX, posY, posZ);
-                planeNode.EulerAngles = new SCNVector3((float)-Math.PI / 2, 0, 0);
+        //        var posX = planeAnchor.Center.X;
+        //        var posY = planeAnchor.Center.Y;
+        //        var posZ = planeAnchor.Center.Z;
 
-                node.AddChildNode(planeNode);
+        //        planeNode.Position = new SCNVector3(posX, posY, posZ);
+        //        planeNode.EulerAngles = new SCNVector3((float)-Math.PI / 2, 0, 0);
 
-                _planeStore.Add(anchor.Identifier, plane);
-                _spatialStore.Register(anchor.Identifier, new Plane(){ Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
-            }
+        //        node.AddChildNode(planeNode);
 
-            public override void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
-            {
-                if (!(anchor is ARPlaneAnchor))
-                    return;
+        //        _planeStore.Add(anchor.Identifier, plane);
+        //        _spatialStore.Register(anchor.Identifier, new Plane(){ Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
+        //    }
 
-                var planeAnchor = anchor as ARPlaneAnchor;
-                var planeNode = node.ChildNodes.First();
-                var plane = planeNode.Geometry as SCNPlane;
+        //    public override void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
+        //    {
+        //        if (!(anchor is ARPlaneAnchor))
+        //            return;
 
-                var newWidth = planeAnchor.Extent.X;
-                var newHeight = planeAnchor.Extent.Z;
-                plane.Width = newWidth;
-                plane.Height = newHeight;
+        //        var planeAnchor = anchor as ARPlaneAnchor;
+        //        var planeNode = node.ChildNodes.First();
+        //        var plane = planeNode.Geometry as SCNPlane;
 
-                var posX = planeAnchor.Center.X;
-                var posY = planeAnchor.Center.Y;
-                var posZ = planeAnchor.Center.Z;
+        //        var newWidth = planeAnchor.Extent.X;
+        //        var newHeight = planeAnchor.Extent.Z;
+        //        plane.Width = newWidth;
+        //        plane.Height = newHeight;
 
-                planeNode.Position = new SCNVector3(posX, posY, posZ);
+        //        var posX = planeAnchor.Center.X;
+        //        var posY = planeAnchor.Center.Y;
+        //        var posZ = planeAnchor.Center.Z;
 
-                //_planeStore.[anchor.Identifier] = plane);
-                _spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
-            }
+        //        planeNode.Position = new SCNVector3(posX, posY, posZ);
 
-            public SCNPlane FindPlane(NSUuid id)
-            {
-                return _planeStore[id];
-            }
-        }
+        //        //_planeStore.[anchor.Identifier] = plane);
+        //        _spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
+        //    }
 
-        ISpatialStore _spatialStore;
-        SpatialQL _spatialQuerying;
+        //    public SCNPlane FindPlane(NSUuid id)
+        //    {
+        //        return _planeStore[id];
+        //    }
+        //}
+
+        //ISpatialStore _spatialStore;
+        //SpatialQL _spatialQuerying;
         int _queryId;
         NSUuid _spatialObjectId;
-        MyARSCNViewDelegate _viewDelegate;
+        //MyARSCNViewDelegate _viewDelegate;
+
+        Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
         protected ViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
 
-        void _spatialQuerying_QueryFulfilled(object sender, Util.EventArgs<(int queryId, NSUuid spatialObjectId)> e)
-        {
-            (var queryId, var spatialObjectId) = e.Value;
-            if (queryId != _queryId)
-                return;
+        //void _spatialQuerying_QueryFulfilled(object sender, Util.EventArgs<(int queryId, NSUuid spatialObjectId)> e)
+        //{
+        //    (var queryId, var spatialObjectId) = e.Value;
+        //    if (queryId != _queryId)
+        //        return;
 
-            _spatialQuerying.QueryFulfilled -= _spatialQuerying_QueryFulfilled;
+        //    _spatialQuerying.QueryFulfilled -= _spatialQuerying_QueryFulfilled;
 
-            _spatialObjectId = spatialObjectId;
-            var scnPlane =_viewDelegate.FindPlane(_spatialObjectId);
-            scnPlane.Materials.First().Diffuse.Contents = UIColor.Green;
-        }
+        //    _spatialObjectId = spatialObjectId;
+        //    var scnPlane =_viewDelegate.FindPlane(_spatialObjectId);
+        //    scnPlane.Materials.First().Diffuse.Contents = UIColor.Green;
+        //}
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
 
-            var spatialStore = new SpatialStore();
-            _spatialStore = spatialStore;
+            //var spatialStore = new SpatialStore();
+            //_spatialStore = spatialStore;
 
-            _spatialQuerying = new SpatialQL(_spatialStore);
-            _spatialQuerying.QueryFulfilled += _spatialQuerying_QueryFulfilled;
-            _queryId = _spatialQuerying.RegisterQuery(p => p.Width >= 0.8 && p.Height >= 0.3);
+            //_spatialQuerying = new SpatialQL(_spatialStore);
+            //_spatialQuerying.QueryFulfilled += _spatialQuerying_QueryFulfilled;
+            //_queryId = _spatialQuerying.RegisterQuery(p => p.Width >= 0.8 && p.Height >= 0.3);
 
-            _viewDelegate = new MyARSCNViewDelegate(spatialStore);
-            sceneView.Delegate = _viewDelegate;
+            //_viewDelegate = new MyARSCNViewDelegate(spatialStore);
+            //sceneView.Delegate = _viewDelegate;
+            sceneView.Delegate = this;
 
             sceneView.ShowsStatistics = true;
             //sceneView.DebugOptions = ARSCNDebugOptions.ShowWorldOrigin | ARSCNDebugOptions.ShowFeaturePoints;
@@ -199,15 +207,15 @@ namespace ARRunner.Xamarin
         [Action("leftclicked:")]
         void LeftClicked(NSObject sender)
         {
-            var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
-            scnPlane.Materials.First().Diffuse.Contents = UIColor.Orange;        
+            //var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
+            //scnPlane.Materials.First().Diffuse.Contents = UIColor.Orange;        
         }
 
         [Action("rightclicked:")]
         void RightClicked(NSObject sender)
         {
-            var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
-            scnPlane.Materials.First().Diffuse.Contents = UIColor.Magenta;        
+            //var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
+            //scnPlane.Materials.First().Diffuse.Contents = UIColor.Magenta;        
         }
     }
 }

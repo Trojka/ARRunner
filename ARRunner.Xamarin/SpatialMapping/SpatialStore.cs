@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Foundation;
 
 namespace ARRunner.Xamarin.SpatialMapping
@@ -17,6 +18,7 @@ namespace ARRunner.Xamarin.SpatialMapping
             if(!_knownObjects.ContainsKey(id))
             {
                 _knownObjects.Add(id, spatialObject);
+                Debug.WriteLine("Added new spatial object to store");
                 HandleStoreChanged();
                 return;
             }
@@ -28,7 +30,10 @@ namespace ARRunner.Xamarin.SpatialMapping
         public void Remove(NSUuid id)
         {
             if (!_knownObjects.ContainsKey(id))
+            {
+                Debug.WriteLine("Removed spatial object from store");
                 return;
+            }
 
             _knownObjects.Remove(id);
             HandleStoreChanged();
