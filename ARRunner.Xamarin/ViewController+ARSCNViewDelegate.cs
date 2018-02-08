@@ -6,6 +6,7 @@ using SceneKit;
 using UIKit;
 using System.Collections.Generic;
 using CoreGraphics;
+using ARRunner.Xamarin.SpatialMapping;
 
 namespace ARRunner.Xamarin
 {
@@ -19,17 +20,23 @@ namespace ARRunner.Xamarin
             var screenRect = sceneView.Bounds;
             var screenCenter = new CGPoint(screenRect.GetMidX(), screenRect.GetMidY());
 
+            var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, sceneView);
+
+            if (!worldPos.HasValue)
+                return;
+
             if(_cursorNode == null)
             {
                 var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
 
                 _cursorNode = new SCNNode();
                 _cursorNode.Geometry = box;
-                _cursorNode.Position = new SCNVector3(0.0f, 0.0f, 0.0f);
+                _cursorNode.Position = worldPos.Value;
 
                 sceneView.Scene.RootNode.AddChildNode(_cursorNode);
             }
 
+            _cursorNode.Position = worldPos.Value;
         }
 
         [Export("renderer:didAddNode:forAnchor:")]

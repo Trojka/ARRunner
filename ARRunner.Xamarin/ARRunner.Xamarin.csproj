@@ -117,6 +117,7 @@
     <Compile Include="Util\EventArgs.cs" />
     <Compile Include="Game\GamePlay.cs" />
     <Compile Include="ViewController+ARSCNViewDelegate.cs" />
+    <Compile Include="SpatialMapping\PlaneFinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />

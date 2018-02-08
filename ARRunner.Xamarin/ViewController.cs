@@ -88,8 +88,8 @@ namespace ARRunner.Xamarin
 
         //ISpatialStore _spatialStore;
         //SpatialQL _spatialQuerying;
-        int _queryId;
-        NSUuid _spatialObjectId;
+        //int _queryId;
+        //NSUuid _spatialObjectId;
         //MyARSCNViewDelegate _viewDelegate;
 
         Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
@@ -180,21 +180,21 @@ namespace ARRunner.Xamarin
             var touch = (UITouch)touches.First();
             var pointInScene = touch.LocationInView(sceneView);
 
-            var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
-            if (hitResult.Count() <= 0)
-                return;
+            //var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
+            //if (hitResult.Count() <= 0)
+            //    return;
 
-            var xPos = hitResult[0].WorldTransform.Column3.X;
-            var yPos = hitResult[0].WorldTransform.Column3.Y;
-            var zPos = hitResult[0].WorldTransform.Column3.Z;
+            //var xPos = hitResult[0].WorldTransform.Column3.X;
+            //var yPos = hitResult[0].WorldTransform.Column3.Y;
+            //var zPos = hitResult[0].WorldTransform.Column3.Z;
 
-            var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
+            //var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
 
-            var boxNode = new SCNNode();
-            boxNode.Geometry = box;
-            boxNode.Position = new SCNVector3(xPos, yPos, zPos);
+            //var boxNode = new SCNNode();
+            //boxNode.Geometry = box;
+            //boxNode.Position = new SCNVector3(xPos, yPos, zPos);
 
-            sceneView.Scene.RootNode.AddChildNode(boxNode);
+            //sceneView.Scene.RootNode.AddChildNode(boxNode);
 
             //SCNReferenceNode candle = new SCNReferenceNode(NSUrl.FromString(
             //    NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/candle/candle.scn"));
