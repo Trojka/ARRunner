@@ -93,6 +93,7 @@
     <Folder Include="SpatialQuerying\" />
     <Folder Include="Util\" />
     <Folder Include="Game\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -118,6 +119,7 @@
     <Compile Include="Game\GamePlay.cs" />
     <Compile Include="ViewController+ARSCNViewDelegate.cs" />
     <Compile Include="SpatialMapping\PlaneFinding.cs" />
+    <Compile Include="Extensions\SCNVector3Ex.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />
