@@ -10,16 +10,23 @@ namespace ARRunner.Xamarin.SpatialMapping
 {
     public class PlaneFinding
     {
-        private class HitTestRay : NSObject
+        public enum HitType
+        {
+            None,
+            Plane,
+            FeaturePoint
+        }
+
+        private class Ray : NSObject
         {
             public SCNVector3 Origin { get; set; }
 
             public SCNVector3 Direction { get; set; }
-            public HitTestRay()
+            public Ray()
             {
             }
 
-            public HitTestRay(SCNVector3 origin, SCNVector3 direction)
+            public Ray(SCNVector3 origin, SCNVector3 direction)
             {
                 // Initialize
                 Origin = origin;
@@ -27,17 +34,24 @@ namespace ARRunner.Xamarin.SpatialMapping
             }
         }
 
-        public static SCNVector3? FindNearestWorldPointToScreenPoint(CGPoint point, ARSCNView sceneView)
+        public static (SCNVector3? hitPoint, HitType hitType) FindNearestWorldPointToScreenPoint(CGPoint point, ARSCNView sceneView, SCNVector3? pointOnPlane)
         {
-            //var planeHitPosition = HitTestExistingPlanes(point, sceneView);
-            //if (planeHitPosition.HasValue)
-                //return planeHitPosition;
+            var planeHitPosition = HitTestExistingPlanes(point, sceneView);
+            if (planeHitPosition.HasValue)
+                return (planeHitPosition, HitType.Plane);
 
             var pointCloudHitPosition = HitTestPointCloud(point, sceneView, 18, 0.2, 2.0);
             if (pointCloudHitPosition.HasValue)
-                return pointCloudHitPosition;
+                return (pointCloudHitPosition, HitType.FeaturePoint);
 
-            return null;
+            //if(pointOnPlane.HasValue)
+            //{
+            //    var infinitePlaneHitPosition = HitTestWithInfiniteHorizontalPlane(point, sceneView, pointOnPlane.Value);
+            //    if (infinitePlaneHitPosition.HasValue)
+            //        return infinitePlaneHitPosition.Value;
+            //}
+
+            return (null, HitType.None);
         }
 
         private static SCNVector3? HitTestExistingPlanes(CGPoint point, ARSCNView sceneView)
@@ -171,7 +185,7 @@ namespace ARRunner.Xamarin.SpatialMapping
             return RayIntersectionWithHorizontalPlane(ray.Origin, ray.Direction, pointOnPlane.Y);
         }
 
-        private static HitTestRay HitTestRayFromScreenPos(ARSCNView sceneView, CGPoint point)
+        private static Ray HitTestRayFromScreenPos(ARSCNView sceneView, CGPoint point)
         {
             //if (sceneView.Session == null || ViewController.CurrentFrame == null)
             //{
@@ -194,7 +208,7 @@ namespace ARRunner.Xamarin.SpatialMapping
             var rayDirection = screenPosOnFarClippingPlane - cameraPos; //screenPosOnFarClippingPlane.Subtract(cameraPos);
             rayDirection.Normalize();
 
-            return new HitTestRay(cameraPos, rayDirection);
+            return new Ray(cameraPos, rayDirection);
         }
 
         public static SCNVector3? RayIntersectionWithHorizontalPlane(SCNVector3 rayOrigin, SCNVector3 direction, float planeY)

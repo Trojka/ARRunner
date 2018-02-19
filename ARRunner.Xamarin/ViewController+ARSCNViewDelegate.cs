@@ -29,9 +29,9 @@ namespace ARRunner.Xamarin
             var screenRect = sceneView.Bounds;
             var screenCenter = new CGPoint(screenRect.GetMidX(), screenRect.GetMidY());
 
-            var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, sceneView);
+            var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, sceneView, null);
 
-            if (!worldPos.HasValue)
+            if (worldPos.hitType == PlaneFinding.HitType.None)
                 return;
 
             if(_cursorNode == null)
@@ -40,66 +40,67 @@ namespace ARRunner.Xamarin
 
                 _cursorNode = new SCNNode();
                 _cursorNode.Geometry = box;
-                _cursorNode.Position = worldPos.Value;
+                _cursorNode.Position = worldPos.hitPoint.Value;
 
                 sceneView.Scene.RootNode.AddChildNode(_cursorNode);
             }
 
-            _cursorNode.Position = worldPos.Value;
+            _cursorNode.Position = worldPos.hitPoint.Value;
+            _cursorNode.Geometry.Materials.First().Diffuse.Contents = worldPos.hitType == PlaneFinding.HitType.Plane ? UIColor.Green : UIColor.Red;
         }
 
         [Export("renderer:didAddNode:forAnchor:")]
         public void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
         {
-            if (!(anchor is ARPlaneAnchor))
-                return;
+            //if (!(anchor is ARPlaneAnchor))
+            //    return;
 
-            var planeAnchor = anchor as ARPlaneAnchor;
+            //var planeAnchor = anchor as ARPlaneAnchor;
 
-            var width = planeAnchor.Extent.X;
-            var height = planeAnchor.Extent.Z;
+            //var width = planeAnchor.Extent.X;
+            //var height = planeAnchor.Extent.Z;
 
-            var plane = new SCNPlane() { Width = width, Height = height };
-            plane.Materials.First().Diffuse.Contents = UIColor.Red;
+            //var plane = new SCNPlane() { Width = width, Height = height };
+            //plane.Materials.First().Diffuse.Contents = UIColor.Red;
 
-            var planeNode = new SCNNode() { Geometry = plane };
+            //var planeNode = new SCNNode() { Geometry = plane };
 
-            var posX = planeAnchor.Center.X;
-            var posY = planeAnchor.Center.Y;
-            var posZ = planeAnchor.Center.Z;
+            //var posX = planeAnchor.Center.X;
+            //var posY = planeAnchor.Center.Y;
+            //var posZ = planeAnchor.Center.Z;
 
-            planeNode.Position = new SCNVector3(posX, posY, posZ);
-            planeNode.EulerAngles = new SCNVector3((float)-Math.PI / 2, 0, 0);
+            //planeNode.Position = new SCNVector3(posX, posY, posZ);
+            //planeNode.EulerAngles = new SCNVector3((float)-Math.PI / 2, 0, 0);
 
-            node.AddChildNode(planeNode);
+            //node.AddChildNode(planeNode);
 
-            _planeStore.Add(anchor.Identifier, plane);
-            //_spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
+            //_planeStore.Add(anchor.Identifier, plane);
+            ////_spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
         }
 
         [Export("renderer:didUpdateNode:forAnchor:")]
         public void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
         {
-            if (!(anchor is ARPlaneAnchor))
-                return;
+            //if (!(anchor is ARPlaneAnchor))
+            //    return;
 
-            var planeAnchor = anchor as ARPlaneAnchor;
-            var planeNode = node.ChildNodes.First();
-            var plane = planeNode.Geometry as SCNPlane;
+            //var planeAnchor = anchor as ARPlaneAnchor;
+            //var planeNode = node.ChildNodes.First();
+            //var plane = planeNode.Geometry as SCNPlane;
 
-            var newWidth = planeAnchor.Extent.X;
-            var newHeight = planeAnchor.Extent.Z;
-            plane.Width = newWidth;
-            plane.Height = newHeight;
+            //var newWidth = planeAnchor.Extent.X;
+            //var newHeight = planeAnchor.Extent.Z;
+            //plane.Width = newWidth;
+            //plane.Height = newHeight;
 
-            var posX = planeAnchor.Center.X;
-            var posY = planeAnchor.Center.Y;
-            var posZ = planeAnchor.Center.Z;
+            //var posX = planeAnchor.Center.X;
+            //var posY = planeAnchor.Center.Y;
+            //var posZ = planeAnchor.Center.Z;
 
-            planeNode.Position = new SCNVector3(posX, posY, posZ);
+            //planeNode.Position = new SCNVector3(posX, posY, posZ);
 
-            //_planeStore.[anchor.Identifier] = plane);
-            //_spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
+            ////_planeStore.[anchor.Identifier] = plane);
+            ////_spatialStore.Register(anchor.Identifier, new Plane() { Height = planeAnchor.Extent.Z, Width = planeAnchor.Extent.X });
 
         }
 
