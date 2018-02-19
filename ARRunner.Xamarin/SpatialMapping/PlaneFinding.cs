@@ -33,7 +33,7 @@ namespace ARRunner.Xamarin.SpatialMapping
             //if (planeHitPosition.HasValue)
                 //return planeHitPosition;
 
-            var pointCloudHitPosition = HitTextPointCloud(point, sceneView, 18, 0.2, 2.0);
+            var pointCloudHitPosition = HitTestPointCloud(point, sceneView, 18, 0.2, 2.0);
             if (pointCloudHitPosition.HasValue)
                 return pointCloudHitPosition;
 
@@ -55,30 +55,41 @@ namespace ARRunner.Xamarin.SpatialMapping
             return null;        
         }
 
-        private static SCNVector3? HitTextPointCloud(CGPoint point, ARSCNView sceneView, double coneOpeningAngleInDegrees, double minDistance = 0, double maxDistance = Double.MaxValue)
+        private static SCNVector3? HitTestPointCloud(CGPoint point, ARSCNView sceneView, double coneOpeningAngleInDegrees, double minDistance = 0, double maxDistance = Double.MaxValue)
         {
-            SCNVector3? result = null;
-            float maxhitTestResultDistance = float.MinValue;
+            //var results = new List<FeatureHitTestResult>();
+            var minHitTestResultDistance = float.MaxValue;
+            //FeatureHitTestResult closestFeauture = null;
+            SCNVector3? closestFeauturePosition = null;
 
-            if (sceneView.Session.CurrentFrame == null || sceneView.Session.CurrentFrame.RawFeaturePoints == null)
-                return null;
+            if (sceneView.Session == null || ViewController.CurrentFrame == null)
+            {
+                return null; //results.ToArray();
+            }
+            var features = ViewController.CurrentFrame.RawFeaturePoints;
+            if (features == null)
+            {
+                return null; //results.ToArray();
+            }
 
-            var featureCloud = sceneView.Session.CurrentFrame.RawFeaturePoints;
-
-            var hitTestRay = HitTestRayFromScreenPos(sceneView, point);
+            var ray = HitTestRayFromScreenPos(sceneView, point);
+            if (ray == null)
+            {
+                return null; //results.ToArray();
+            }
 
             var maxAngleInDeg = Math.Min(coneOpeningAngleInDegrees, 360) / 2.0;
             var maxAngle = (maxAngleInDeg / 180) * Math.PI;
 
-            foreach (var featurePos in featureCloud.Points)
+            foreach (var featurePos in features.Points)
             {
                 var scnFeaturePos = new SCNVector3(featurePos.X, featurePos.Y, featurePos.Z);
-                var originToFeature = scnFeaturePos - hitTestRay.Origin;
-                var crossProduct = originToFeature.Cross(hitTestRay.Direction);
-                var featureDistanceFromResult = crossProduct.LengthFast;
+                var originToFeature = scnFeaturePos - ray.Origin;
+                //var crossProduct = originToFeature.Cross(ray.Direction);
+                //var featureDistanceFromResult = crossProduct.LengthFast;
 
-                var hitTestResult = hitTestRay.Origin + (hitTestRay.Direction * (hitTestRay.Direction.Dot(originToFeature)));
-                var hitTestResultDistance = (hitTestResult - hitTestRay.Origin).LengthFast;
+                var hitTestResult = ray.Origin + (ray.Direction * (ray.Direction.Dot(originToFeature)));
+                var hitTestResultDistance = (hitTestResult - ray.Origin).LengthFast;
 
                 if (hitTestResultDistance < minDistance || hitTestResultDistance > maxDistance)
                 {
@@ -87,7 +98,7 @@ namespace ARRunner.Xamarin.SpatialMapping
                 }
 
                 var originToFeatureNormalized = originToFeature.Normalized();
-                var angleBetweenRayAndFeature = Math.Acos(hitTestRay.Direction.Dot(originToFeatureNormalized));
+                var angleBetweenRayAndFeature = Math.Acos(ray.Direction.Dot(originToFeatureNormalized));
 
                 if (angleBetweenRayAndFeature > maxAngle)
                 {
@@ -95,35 +106,29 @@ namespace ARRunner.Xamarin.SpatialMapping
                     continue;
                 }
 
-                // All tests passed: Add the hit against this feature to the results.
-                if(hitTestResultDistance > maxhitTestResultDistance) {
-                    result = hitTestResult;
+                if(hitTestResultDistance < minHitTestResultDistance)
+                {
+                    minHitTestResultDistance = hitTestResultDistance;
+                    closestFeauturePosition = hitTestResult; //new FeatureHitTestResult(hitTestResult); //, hitTestResultDistance, scnFeaturePos, featureDistanceFromResult);
                 }
 
+                // All tests passed: Add the hit against this feature to the results.
                 //results.Add(new FeatureHitTestResult(hitTestResult, hitTestResultDistance, scnFeaturePos, featureDistanceFromResult));
             }
 
-            return result;
+            return closestFeauturePosition;
 
-            //// Sort the results by feature distance to the ray.
-            //results.Sort((a, b) => a.DistanceToRayOrigin.CompareTo(b.DistanceToRayOrigin));
+   //         if(closestFeauture != null)
+   //         {
+   //             results.Add(closestFeauture);
+   //         }
 
-            //// Cap the list to maxResults.
-            //results.GetRange(0, Math.Min(results.Count(), maxResults));
+            ////// Sort the results by feature distance to the ray.
+            ////results.Sort((a, b) => a.DistanceToRayOrigin.CompareTo(b.DistanceToRayOrigin));
+
+            ////// Cap the list to maxResults.
+            ////results.GetRange(0, Math.Min(results.Count(), maxResults));
             //return results.ToArray();
-
-
-
-
-            //var highQualityfeatureHitTestResults = sceneView.HitTestWithFeatures(position, 18, 0.2, 2.0);
-            //if (highQualityfeatureHitTestResults.Count() > 0)
-            //{
-            //    var highQualityFeatureHit = highQualityfeatureHitTestResults.First();
-            //    return highQualityFeatureHit.Position;
-            //}
-
-
-            //return null;
         }
 
         //public static SCNVector3? HitTextPointCloud(CGPoint pt, ARSCNView self)
@@ -141,6 +146,30 @@ namespace ARRunner.Xamarin.SpatialMapping
         //    }
         //    return results.ToArray();
         //}
+
+        public static SCNVector3? HitTestWithInfiniteHorizontalPlane(CGPoint point, ARSCNView sceneView, SCNVector3 pointOnPlane)
+        {
+            if (sceneView.Session == null || ViewController.CurrentFrame == null)
+            {
+                return null;
+            }
+
+            var currentFrame = ViewController.CurrentFrame;
+
+            var ray = HitTestRayFromScreenPos(sceneView, point);
+            if (ray == null)
+            {
+                return null;
+            };
+
+            // Do not intersect with planes above the camera or if the ray is almost parallel to the plane.
+            if (ray.Direction.Y > -0.03f)
+            {
+                return null;
+            }
+
+            return RayIntersectionWithHorizontalPlane(ray.Origin, ray.Direction, pointOnPlane.Y);
+        }
 
         private static HitTestRay HitTestRayFromScreenPos(ARSCNView sceneView, CGPoint point)
         {
@@ -167,5 +196,46 @@ namespace ARRunner.Xamarin.SpatialMapping
 
             return new HitTestRay(cameraPos, rayDirection);
         }
+
+        public static SCNVector3? RayIntersectionWithHorizontalPlane(SCNVector3 rayOrigin, SCNVector3 direction, float planeY)
+        {
+            // Normalize direction
+            direction = direction.Normalized();
+
+            // Special case handling: Check if the ray is horizontal as well.
+            if (direction.Y == 0)
+            {
+                if (rayOrigin.Y == planeY)
+                {
+                    // The ray is horizontal and on the plane, thus all points on the ray intersect with the plane.
+                    // Therefore we simply return the ray origin.
+                    return rayOrigin;
+                }
+                else
+                {
+                    // The ray is parallel to the plane and never intersects.
+                    return null;
+                }
+            }
+
+            // The distance from the ray's origin to the intersection point on the plane is:
+            //   (pointOnPlane - rayOrigin) dot planeNormal
+            //  --------------------------------------------
+            //          direction dot planeNormal
+
+            // Since we know that horizontal planes have normal (0, 1, 0), we can simplify this to:
+            var dist = (planeY - rayOrigin.Y) / direction.Y;
+
+            // Do not return intersections behind the ray's origin.
+            if (dist < 0)
+            {
+                return null;
+            }
+
+            // Return the intersection point.
+            return rayOrigin.Add(direction * dist);
+        }
+
+
     }
 }

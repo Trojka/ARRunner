@@ -17,6 +17,15 @@ namespace ARRunner.Xamarin
         [Export("renderer:updateAtTime:")]
         public void RendererUpdateAtTime(SCNSceneRenderer renderer, double updateAtTime)
         {
+            if (Session?.CurrentFrame == null)
+            {
+                return;
+            }
+            // Vital for memory: Single location to set current frame! (Note: Assignment disposes existing frame -- see `set`
+            ViewController.CurrentFrame = Session.CurrentFrame;
+            //UpdateFocusSquare();
+
+
             var screenRect = sceneView.Bounds;
             var screenCenter = new CGPoint(screenRect.GetMidX(), screenRect.GetMidY());
 

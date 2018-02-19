@@ -34,5 +34,10 @@ namespace ARRunner.Xamarin.Extensions
         {
             return new SCNVector3(vector3.Y * vec.Z - vector3.Z * vec.Y, vector3.Z * vec.X - vector3.X * vec.Z, vector3.X * vec.Y - vector3.Y * vec.X);
         }
+
+        public static SCNVector3 Add(this SCNVector3 vector3, SCNVector3 right)
+        {
+            return new SCNVector3(vector3.X + right.X, vector3.Y + right.Y, vector3.Z + right.Z);
+        }
     }
 }

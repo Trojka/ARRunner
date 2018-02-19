@@ -92,6 +92,24 @@ namespace ARRunner.Xamarin
         //NSUuid _spatialObjectId;
         //MyARSCNViewDelegate _viewDelegate;
 
+
+        public ARSession Session { get; set; } = new ARSession();
+
+        static private ARFrame currentFrame;
+        static public ARFrame CurrentFrame
+        {
+            get => currentFrame;
+
+            private set
+            {
+                if (currentFrame != null)
+                {
+                    currentFrame.Dispose();
+                }
+                currentFrame = value;
+            }
+        }
+
         Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
         protected ViewController(IntPtr handle) : base(handle)
@@ -131,6 +149,7 @@ namespace ARRunner.Xamarin
             sceneView.ShowsStatistics = true;
             //sceneView.DebugOptions = ARSCNDebugOptions.ShowWorldOrigin | ARSCNDebugOptions.ShowFeaturePoints;
             sceneView.DebugOptions = ARSCNDebugOptions.ShowFeaturePoints;
+            sceneView.Session = Session;
 
             var scene = new SCNScene();
 
