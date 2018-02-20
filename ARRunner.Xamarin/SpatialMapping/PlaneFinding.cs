@@ -2,6 +2,7 @@
 using System.Linq;
 using ARKit;
 using ARRunner.Xamarin.Extensions;
+using ARRunner.Xamarin.Game;
 using CoreGraphics;
 using Foundation;
 using SceneKit;
@@ -76,11 +77,11 @@ namespace ARRunner.Xamarin.SpatialMapping
             //FeatureHitTestResult closestFeauture = null;
             SCNVector3? closestFeauturePosition = null;
 
-            if (sceneView.Session == null || ViewController.CurrentFrame == null)
+            if (sceneView.Session == null || ARGamePlay.CurrentFrame == null)
             {
                 return null; //results.ToArray();
             }
-            var features = ViewController.CurrentFrame.RawFeaturePoints;
+            var features = ARGamePlay.CurrentFrame.RawFeaturePoints;
             if (features == null)
             {
                 return null; //results.ToArray();
@@ -163,12 +164,12 @@ namespace ARRunner.Xamarin.SpatialMapping
 
         public static SCNVector3? HitTestWithInfiniteHorizontalPlane(CGPoint point, ARSCNView sceneView, SCNVector3 pointOnPlane)
         {
-            if (sceneView.Session == null || ViewController.CurrentFrame == null)
+            if (sceneView.Session == null || ARGamePlay.CurrentFrame == null)
             {
                 return null;
             }
 
-            var currentFrame = ViewController.CurrentFrame;
+            var currentFrame = ARGamePlay.CurrentFrame;
 
             var ray = HitTestRayFromScreenPos(sceneView, point);
             if (ray == null)

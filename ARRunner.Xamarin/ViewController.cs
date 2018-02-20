@@ -7,6 +7,7 @@ using ARRunner.Xamarin.SpatialMapping;
 using Foundation;
 using ARRunner.Xamarin.SpatialQuerying;
 using System.Collections.Generic;
+using ARRunner.Xamarin.Game;
 
 namespace ARRunner.Xamarin
 {
@@ -92,23 +93,7 @@ namespace ARRunner.Xamarin
         //NSUuid _spatialObjectId;
         //MyARSCNViewDelegate _viewDelegate;
 
-
-        public ARSession Session { get; set; } = new ARSession();
-
-        static private ARFrame currentFrame;
-        static public ARFrame CurrentFrame
-        {
-            get => currentFrame;
-
-            private set
-            {
-                if (currentFrame != null)
-                {
-                    currentFrame.Dispose();
-                }
-                currentFrame = value;
-            }
-        }
+        ARGamePlay gamePlay = new ARGamePlay();
 
         Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
@@ -143,13 +128,16 @@ namespace ARRunner.Xamarin
             //_queryId = _spatialQuerying.RegisterQuery(p => p.Width >= 0.8 && p.Height >= 0.3);
 
             //_viewDelegate = new MyARSCNViewDelegate(spatialStore);
+
+            gamePlay.SceneView = sceneView;
+
             //sceneView.Delegate = _viewDelegate;
             sceneView.Delegate = this;
 
             sceneView.ShowsStatistics = true;
             //sceneView.DebugOptions = ARSCNDebugOptions.ShowWorldOrigin | ARSCNDebugOptions.ShowFeaturePoints;
             sceneView.DebugOptions = ARSCNDebugOptions.ShowFeaturePoints;
-            sceneView.Session = Session;
+            sceneView.Session = gamePlay.Session;
 
             var scene = new SCNScene();
 

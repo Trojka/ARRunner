@@ -7,46 +7,51 @@ using UIKit;
 using System.Collections.Generic;
 using CoreGraphics;
 using ARRunner.Xamarin.SpatialMapping;
+using ARRunner.Xamarin.Game;
 
 namespace ARRunner.Xamarin
 {
     public partial class ViewController : IARSCNViewDelegate
     {
-        SCNNode _cursorNode = null;
+        //SCNNode _cursorNode = null;
+        //SceneManager sceneManager = new SceneManager();
 
         [Export("renderer:updateAtTime:")]
         public void RendererUpdateAtTime(SCNSceneRenderer renderer, double updateAtTime)
         {
-            if (Session?.CurrentFrame == null)
-            {
-                return;
-            }
-            // Vital for memory: Single location to set current frame! (Note: Assignment disposes existing frame -- see `set`
-            ViewController.CurrentFrame = Session.CurrentFrame;
-            //UpdateFocusSquare();
+            gamePlay.Update();
+
+            //if (Session?.CurrentFrame == null)
+            //{
+            //    return;
+            //}
+            //// Vital for memory: Single location to set current frame! (Note: Assignment disposes existing frame -- see `set`
+            //ARGamePlay.CurrentFrame = Session.CurrentFrame;
 
 
-            var screenRect = sceneView.Bounds;
-            var screenCenter = new CGPoint(screenRect.GetMidX(), screenRect.GetMidY());
+            //var screenRect = sceneView.Bounds;
+            //var screenCenter = new CGPoint(screenRect.GetMidX(), screenRect.GetMidY());
 
-            var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, sceneView, null);
+            //var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, sceneView, null);
 
-            if (worldPos.hitType == PlaneFinding.HitType.None)
-                return;
+            //if (worldPos.hitType == PlaneFinding.HitType.None)
+            //    return;
 
-            if(_cursorNode == null)
-            {
-                var box = new SCNBox() { Width = 0.1f, Height = 0.1f, Length = 0.1f, ChamferRadius = 0.0f };
+            //sceneManager.PlaceRunnerInSceneAtPosition(sceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.RunnerState.Preparing : SceneManager.RunnerState.Fixed);
 
-                _cursorNode = new SCNNode();
-                _cursorNode.Geometry = box;
-                _cursorNode.Position = worldPos.hitPoint.Value;
+            //if(_cursorNode == null)
+            //{
+            //    var box = new SCNBox() { Width = 0.025f, Height = 0.025f, Length = 0.025f, ChamferRadius = 0.0f };
 
-                sceneView.Scene.RootNode.AddChildNode(_cursorNode);
-            }
+            //    _cursorNode = new SCNNode();
+            //    _cursorNode.Geometry = box;
+            //    _cursorNode.Position = worldPos.hitPoint.Value;
 
-            _cursorNode.Position = worldPos.hitPoint.Value;
-            _cursorNode.Geometry.Materials.First().Diffuse.Contents = worldPos.hitType == PlaneFinding.HitType.Plane ? UIColor.Green : UIColor.Red;
+            //    sceneView.Scene.RootNode.AddChildNode(_cursorNode);
+            //}
+
+            //_cursorNode.Position = worldPos.hitPoint.Value;
+            //_cursorNode.Geometry.Materials.First().Diffuse.Contents = worldPos.hitType == PlaneFinding.HitType.Plane ? UIColor.Green : UIColor.Red;
         }
 
         [Export("renderer:didAddNode:forAnchor:")]

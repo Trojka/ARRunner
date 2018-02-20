@@ -116,10 +116,11 @@
     <Compile Include="SpatialMapping\Plane.cs" />
     <Compile Include="SpatialMapping\ISpatialStore.cs" />
     <Compile Include="Util\EventArgs.cs" />
-    <Compile Include="Game\GamePlay.cs" />
+    <Compile Include="Game\ARGamePlay.cs" />
     <Compile Include="ViewController+ARSCNViewDelegate.cs" />
     <Compile Include="SpatialMapping\PlaneFinding.cs" />
     <Compile Include="Extensions\SCNVector3Ex.cs" />
+    <Compile Include="Game\SceneManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />
