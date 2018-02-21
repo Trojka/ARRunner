@@ -121,6 +121,7 @@
     <Compile Include="SpatialMapping\PlaneFinding.cs" />
     <Compile Include="Extensions\SCNVector3Ex.cs" />
     <Compile Include="Game\SceneManager.cs" />
+    <Compile Include="Game\GestureManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />

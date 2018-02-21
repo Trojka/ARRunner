@@ -94,6 +94,7 @@ namespace ARRunner.Xamarin
         //MyARSCNViewDelegate _viewDelegate;
 
         ARGamePlay gamePlay = new ARGamePlay();
+        GestureManager gestureManager = new GestureManager();
 
         Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
@@ -181,11 +182,13 @@ namespace ARRunner.Xamarin
 
         public override void TouchesBegan(Foundation.NSSet touches, UIEvent evt)
         {
-            if(touches.Count <= 0)
-                return;
+            gestureManager.TouchesBegan(touches, evt);
 
-            var touch = (UITouch)touches.First();
-            var pointInScene = touch.LocationInView(sceneView);
+            //if(touches.Count <= 0)
+            //    return;
+
+            //var touch = (UITouch)touches.First();
+            //var pointInScene = touch.LocationInView(sceneView);
 
             //var hitResult = sceneView.HitTest(pointInScene, ARHitTestResultType.ExistingPlaneUsingExtent);
             //if (hitResult.Count() <= 0)
@@ -209,6 +212,21 @@ namespace ARRunner.Xamarin
             //candle.Position = new SCNVector3(xPos, yPos, zPos); //new SCNVector3(0, 0, -1.0f); //
 
             //sceneView.Scene.RootNode.AddChildNode(candle);
+        }
+
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
+            gestureManager.TouchesMoved(touches, evt);
+        }
+
+        public override void TouchesEnded(NSSet touches, UIEvent evt)
+        {
+            gestureManager.TouchesEnded(touches, evt);
+        }
+
+        public override void TouchesCancelled(NSSet touches, UIEvent evt)
+        {
+            gestureManager.TouchesCancelled(touches, evt);
         }
 
         [Action("leftclicked:")]
