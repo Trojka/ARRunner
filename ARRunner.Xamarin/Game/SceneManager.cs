@@ -32,5 +32,10 @@ namespace ARRunner.Xamarin.Game
             _cursorNode.Position = position;
             _cursorNode.Geometry.Materials.First().Diffuse.Contents = state == RunnerState.Fixed ? UIColor.Red : UIColor.Orange;
         }
+
+        internal void FixRunnerAtCurrentPosition(RunnerState ready)
+        {
+            _cursorNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
+        }
     }
 }

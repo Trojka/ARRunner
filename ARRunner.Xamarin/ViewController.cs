@@ -13,6 +13,7 @@ namespace ARRunner.Xamarin
 {
     public partial class ViewController : UIViewController
     {
+
         //private class MyARSCNViewDelegate : ARSCNViewDelegate
         //{
         //    SpatialStore _spatialStore;
@@ -94,7 +95,7 @@ namespace ARRunner.Xamarin
         //MyARSCNViewDelegate _viewDelegate;
 
         ARGamePlay gamePlay = new ARGamePlay();
-        GestureManager gestureManager = new GestureManager();
+        GestureManager gestureManager;
 
         Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
@@ -129,6 +130,9 @@ namespace ARRunner.Xamarin
             //_queryId = _spatialQuerying.RegisterQuery(p => p.Width >= 0.8 && p.Height >= 0.3);
 
             //_viewDelegate = new MyARSCNViewDelegate(spatialStore);
+
+            gestureManager = new GestureManager(sceneView);
+            gestureManager.SingleTouchEvent += gamePlay.GestureManager_SingleTouchEvent;
 
             gamePlay.SceneView = sceneView;
 

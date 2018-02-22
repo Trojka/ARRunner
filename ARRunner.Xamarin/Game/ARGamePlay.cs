@@ -10,7 +10,8 @@ namespace ARRunner.Xamarin.Game
         public enum GameState
         {
             Scanning,
-            Placement
+            Placement,
+            Positioning
         }
 
         SceneManager sceneManager = new SceneManager();
@@ -30,7 +31,7 @@ namespace ARRunner.Xamarin.Game
             }
         }
 
-        public GameState State { get; set; } = GameState.Placement;
+        public GameState State { get; set; } = GameState.Scanning;
 
         public ARSession Session { get; set; } = new ARSession();
 
@@ -57,7 +58,18 @@ namespace ARRunner.Xamarin.Game
                     return;
 
                 sceneManager.PlaceRunnerInSceneAtPosition(SceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.RunnerState.Preparing : SceneManager.RunnerState.Fixed);
+            }
+            if(State == GameState.Placement)
+            {
+                sceneManager.FixRunnerAtCurrentPosition(SceneManager.RunnerState.Ready);
+            }
+        }
 
+        public void GestureManager_SingleTouchEvent(object sender, Util.EventArgs<Game.SingleTouch> e)
+        {
+            if(State == GameState.Scanning && e.Value.State == GestureState.End)
+            {
+                State = GameState.Placement;
             }
         }
     }
