@@ -122,8 +122,9 @@
     <Compile Include="Extensions\SCNVector3Ex.cs" />
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Game\GestureManager.cs" />
-    <Compile Include="Game\SingleTouch.cs" />
+    <Compile Include="Game\SingleFingerTouch.cs" />
     <Compile Include="Game\GestureState.cs" />
+    <Compile Include="Game\TwoFingerTouch.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />

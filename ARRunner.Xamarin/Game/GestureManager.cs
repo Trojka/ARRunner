@@ -18,7 +18,7 @@ namespace ARRunner.Xamarin.Game
         UIView view;
         TouchType currentTouchType = TouchType.None;
 
-        public event EventHandler<EventArgs<SingleTouch>> SingleTouchEvent;
+        public event EventHandler<EventArgs<SingleFingerTouch>> SingleTouchEvent;
 
         public GestureManager(UIView view)
         {
@@ -35,19 +35,23 @@ namespace ARRunner.Xamarin.Game
                 if(SingleTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
-                    var touchData = new SingleTouch(0, touch.LocationInView(view), GestureState.Start);
-                    SingleTouchEvent(this, new EventArgs<SingleTouch>(touchData));
+                    var touchData = new SingleFingerTouch(0, touch.LocationInView(view), GestureState.Start);
+                    SingleTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
                 }
+
             }
-            if(touches.Count == 1 && currentTouchType == TouchType.SingleTouch)
+            else if(touches.Count == 1 && currentTouchType == TouchType.SingleTouch)
             {
                 if (SingleTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
-                    var touchData = new SingleTouch(0, touch.LocationInView(view), GestureState.Cancelled);
-                    SingleTouchEvent(this, new EventArgs<SingleTouch>(touchData));
+                    var touchData = new SingleFingerTouch(0, touch.LocationInView(view), GestureState.Cancelled);
+                    SingleTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
                 }
+
+                currentTouchType = TouchType.None;
             }
+            Debug.WriteLine("TouchesBegan: type: " + currentTouchType);
         }
 
         public void TouchesMoved(NSSet touches, UIEvent evt)
@@ -64,10 +68,14 @@ namespace ARRunner.Xamarin.Game
                 if (SingleTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
-                    var touchData = new SingleTouch(0, touch.LocationInView(view), GestureState.End);
-                    SingleTouchEvent(this, new EventArgs<SingleTouch>(touchData));
+                    var touchData = new SingleFingerTouch(0, touch.LocationInView(view), GestureState.End);
+                    SingleTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
                 }
+
+                currentTouchType = TouchType.None;
             }
+            Debug.WriteLine("TouchesEnded: type: " + currentTouchType);
+
         }
 
         public void TouchesCancelled(NSSet touches, UIEvent evt)

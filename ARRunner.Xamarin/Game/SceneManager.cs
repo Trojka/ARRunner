@@ -15,6 +15,7 @@ namespace ARRunner.Xamarin.Game
         }
 
         SCNNode _cursorNode = null;
+        SCNNode _fieldNode = null;
 
         public void PlaceRunnerInSceneAtPosition(SCNScene scene, SCNVector3 position, RunnerState state)
         {
@@ -33,9 +34,22 @@ namespace ARRunner.Xamarin.Game
             _cursorNode.Geometry.Materials.First().Diffuse.Contents = state == RunnerState.Fixed ? UIColor.Red : UIColor.Orange;
         }
 
-        internal void FixRunnerAtCurrentPosition(RunnerState ready)
+        public void FixRunnerAtCurrentPosition(RunnerState ready)
         {
             _cursorNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
+        }
+
+        public void PlaceRunnerField(SCNScene scene)
+        {
+            var field = new SCNPlane() { Width = 0.2f, Height = 0.4f };
+
+            _fieldNode = new SCNNode();
+            _fieldNode.Geometry = field;
+            _fieldNode.Position = _cursorNode.Position;
+            _fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Orange;
+            _fieldNode.EulerAngles = new SCNVector3(-1 * (float)Math.PI / 2, (float)Math.PI / 2, 0);
+
+            scene.RootNode.AddChildNode(_fieldNode);
         }
     }
 }

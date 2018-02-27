@@ -62,10 +62,11 @@ namespace ARRunner.Xamarin.Game
             if(State == GameState.Placement)
             {
                 sceneManager.FixRunnerAtCurrentPosition(SceneManager.RunnerState.Ready);
+                sceneManager.PlaceRunnerField(SceneView.Scene);
             }
         }
 
-        public void GestureManager_SingleTouchEvent(object sender, Util.EventArgs<Game.SingleTouch> e)
+        public void GestureManager_SingleTouchEvent(object sender, Util.EventArgs<Game.SingleFingerTouch> e)
         {
             if(State == GameState.Scanning && e.Value.State == GestureState.End)
             {

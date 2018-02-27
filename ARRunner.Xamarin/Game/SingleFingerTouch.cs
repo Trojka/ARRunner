@@ -3,9 +3,9 @@ using CoreGraphics;
 
 namespace ARRunner.Xamarin.Game
 {
-    public class SingleTouch
+    public class SingleFingerTouch
     {
-        public SingleTouch(int id, CGPoint coord, GestureState state)
+        public SingleFingerTouch(int id, CGPoint coord, GestureState state)
         {
             Id = id;
             Coord = coord;
