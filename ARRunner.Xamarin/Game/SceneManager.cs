@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CoreGraphics;
 using SceneKit;
 using UIKit;
 
@@ -50,6 +51,11 @@ namespace ARRunner.Xamarin.Game
             _fieldNode.EulerAngles = new SCNVector3(-1 * (float)Math.PI / 2, (float)Math.PI / 2, 0);
 
             scene.RootNode.AddChildNode(_fieldNode);
+        }
+
+        public void RotateRunnerField(CGPoint coord1, CGPoint coord2)
+        {
+            ;
         }
     }
 }

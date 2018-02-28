@@ -132,7 +132,8 @@ namespace ARRunner.Xamarin
             //_viewDelegate = new MyARSCNViewDelegate(spatialStore);
 
             gestureManager = new GestureManager(sceneView);
-            gestureManager.SingleTouchEvent += gamePlay.GestureManager_SingleTouchEvent;
+            gestureManager.SingleFingerTouchEvent += gamePlay.GestureManager_SingleFingerTouchEvent;
+            gestureManager.TwoFingerTouchEvent += gamePlay.GestureManager_TwoFingerTouchEvent;
 
             gamePlay.SceneView = sceneView;
 

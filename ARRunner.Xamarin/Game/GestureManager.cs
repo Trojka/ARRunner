@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Collections.Generic;
 using ARRunner.Xamarin.Util;
 using Foundation;
 using UIKit;
@@ -17,8 +18,10 @@ namespace ARRunner.Xamarin.Game
 
         UIView view;
         TouchType currentTouchType = TouchType.None;
+        List<UITouch> currentTouches = new List<UITouch>();
 
-        public event EventHandler<EventArgs<SingleFingerTouch>> SingleTouchEvent;
+        public event EventHandler<EventArgs<SingleFingerTouch>> SingleFingerTouchEvent;
+        public event EventHandler<EventArgs<TwoFingerTouch>> TwoFingerTouchEvent;
 
         public GestureManager(UIView view)
         {
@@ -32,23 +35,50 @@ namespace ARRunner.Xamarin.Game
             if(touches.Count == 1 && currentTouchType == TouchType.None)
             {
                 currentTouchType = TouchType.SingleTouch;
-                if(SingleTouchEvent != null)
+                currentTouches.Add((UITouch)touches.First());
+                if(SingleFingerTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
                     var touchData = new SingleFingerTouch(0, touch.LocationInView(view), GestureState.Start);
-                    SingleTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
+                    SingleFingerTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
                 }
 
             }
             else if(touches.Count == 1 && currentTouchType == TouchType.SingleTouch)
             {
-                if (SingleTouchEvent != null)
+                var existingTouch = currentTouches[0];
+                currentTouches.Add((UITouch)touches.First());
+                if (SingleFingerTouchEvent != null)
                 {
-                    var touch = (UITouch)touches.First();
+                    var touch = existingTouch;
                     var touchData = new SingleFingerTouch(0, touch.LocationInView(view), GestureState.Cancelled);
-                    SingleTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
+                    SingleFingerTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
                 }
-
+                if(TwoFingerTouchEvent != null)
+                {
+                    var firstTouchData = currentTouches[0];
+                    var secondTouchData = currentTouches[1];
+                    var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Start);
+                    TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                }
+                currentTouchType = TouchType.DoubleTouch;
+            }
+            else if(touches.Count == 2 && currentTouchType == TouchType.None)
+            {
+                currentTouches.AddRange(touches.Cast<UITouch>());
+                var firstTouchData = currentTouches[0];
+                var secondTouchData = currentTouches[1];
+                var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Start);
+                TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                currentTouchType = TouchType.DoubleTouch;
+            }
+            else if(currentTouchType == TouchType.DoubleTouch)
+            {
+                currentTouches.AddRange(touches.Cast<UITouch>());
+                var firstTouchData = currentTouches[0];
+                var secondTouchData = currentTouches[1];
+                var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Cancelled);
+                TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
                 currentTouchType = TouchType.None;
             }
             Debug.WriteLine("TouchesBegan: type: " + currentTouchType);
@@ -65,15 +95,27 @@ namespace ARRunner.Xamarin.Game
 
             if (touches.Count == 1 && currentTouchType == TouchType.SingleTouch)
             {
-                if (SingleTouchEvent != null)
+                if (SingleFingerTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
                     var touchData = new SingleFingerTouch(0, touch.LocationInView(view), GestureState.End);
-                    SingleTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
+                    SingleFingerTouchEvent(this, new EventArgs<SingleFingerTouch>(touchData));
                 }
 
                 currentTouchType = TouchType.None;
             }
+            if (currentTouchType == TouchType.DoubleTouch)
+            {
+                if(TwoFingerTouchEvent != null)
+                {
+                    var firstTouchData = currentTouches[0];
+                    var secondTouchData = currentTouches[1];
+                    var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.End);
+                    TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                }
+
+                currentTouchType = TouchType.None;
+           }
             Debug.WriteLine("TouchesEnded: type: " + currentTouchType);
 
         }

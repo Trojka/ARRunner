@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using ARKit;
 using ARRunner.Xamarin.SpatialMapping;
 using CoreGraphics;
@@ -63,14 +64,25 @@ namespace ARRunner.Xamarin.Game
             {
                 sceneManager.FixRunnerAtCurrentPosition(SceneManager.RunnerState.Ready);
                 sceneManager.PlaceRunnerField(SceneView.Scene);
+                State = GameState.Positioning;
             }
         }
 
-        public void GestureManager_SingleTouchEvent(object sender, Util.EventArgs<Game.SingleFingerTouch> e)
+        public void GestureManager_SingleFingerTouchEvent(object sender, Util.EventArgs<Game.SingleFingerTouch> e)
         {
+            Debug.WriteLine("GestureManager_SingleFingerTouchEvent: " + e.Value.State);
             if(State == GameState.Scanning && e.Value.State == GestureState.End)
             {
                 State = GameState.Placement;
+            }
+        }
+
+        public void GestureManager_TwoFingerTouchEvent(object sender, Util.EventArgs<Game.TwoFingerTouch> e)
+        {
+            Debug.WriteLine("GestureManager_TwoFingerTouchEvent: " + e.Value.State);
+            if (State == GameState.Positioning && (e.Value.State == GestureState.End || e.Value.State == GestureState.Change)
+            {
+                sceneManager.RotateRunnerField(e.Value.Coord1, e.Value.Coord2);
             }
         }
     }
