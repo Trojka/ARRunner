@@ -18,6 +18,11 @@ namespace ARRunner.Xamarin.Game
         SCNNode _cursorNode = null;
         SCNNode _fieldNode = null;
 
+        public SCNVector3? RunnerFieldPosition
+        {
+            get { return _fieldNode?.Position; }
+        }
+
         public void PlaceRunnerInSceneAtPosition(SCNScene scene, SCNVector3 position, RunnerState state)
         {
             if (_cursorNode == null)
@@ -53,7 +58,7 @@ namespace ARRunner.Xamarin.Game
             scene.RootNode.AddChildNode(_fieldNode);
         }
 
-        public void RotateRunnerField(CGPoint coord1, CGPoint coord2)
+        public void RotateRunnerField(SCNVector3 coord1, SCNVector3 coord2)
         {
             ;
         }

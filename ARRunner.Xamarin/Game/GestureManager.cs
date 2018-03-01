@@ -66,19 +66,25 @@ namespace ARRunner.Xamarin.Game
             else if(touches.Count == 2 && currentTouchType == TouchType.None)
             {
                 currentTouches.AddRange(touches.Cast<UITouch>());
-                var firstTouchData = currentTouches[0];
-                var secondTouchData = currentTouches[1];
-                var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Start);
-                TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                if (TwoFingerTouchEvent != null)
+                {
+                    var firstTouchData = currentTouches[0];
+                    var secondTouchData = currentTouches[1];
+                    var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Start);
+                    TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                }
                 currentTouchType = TouchType.DoubleTouch;
             }
             else if(currentTouchType == TouchType.DoubleTouch)
             {
                 currentTouches.AddRange(touches.Cast<UITouch>());
-                var firstTouchData = currentTouches[0];
-                var secondTouchData = currentTouches[1];
-                var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Cancelled);
-                TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                if (TwoFingerTouchEvent != null)
+                {
+                    var firstTouchData = currentTouches[0];
+                    var secondTouchData = currentTouches[1];
+                    var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Cancelled);
+                    TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                }
                 currentTouchType = TouchType.None;
             }
             Debug.WriteLine("TouchesBegan: type: " + currentTouchType);
@@ -86,7 +92,43 @@ namespace ARRunner.Xamarin.Game
 
         public void TouchesMoved(NSSet touches, UIEvent evt)
         {
-            //Debug.WriteLine("TouchesMoved: " + touches.Count);
+            if(currentTouchType == TouchType.SingleTouch)
+            {
+                // where only handling taps, so no need to process this
+            }
+            if(currentTouchType == TouchType.DoubleTouch)
+            {
+                if(touches.Count == 1)
+                {
+                    if (TwoFingerTouchEvent != null)
+                    {
+                        var firstTouchData = (UITouch)touches.First();
+                        var secondTouchData = currentTouches[1];
+                        if (currentTouches[1] == firstTouchData)
+                        {
+                            firstTouchData = currentTouches[1];
+                            secondTouchData = (UITouch)touches.First();
+                        }
+                        var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Change);
+                        TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                    }
+                }
+                if (touches.Count == 2)
+                {
+                    if (TwoFingerTouchEvent != null)
+                    {
+                        var firstTouchData = (UITouch)touches.ElementAt(0);
+                        var secondTouchData = (UITouch)touches.ElementAt(1);
+                        if (currentTouches[1] == firstTouchData)
+                        {
+                            firstTouchData = currentTouches[1];
+                            secondTouchData = (UITouch)touches.First();
+                        }
+                        var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Change);
+                        TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
+                    }
+                }
+            }
         }
 
         public void TouchesEnded(NSSet touches, UIEvent evt)

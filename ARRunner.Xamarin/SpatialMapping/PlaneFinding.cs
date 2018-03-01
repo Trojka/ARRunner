@@ -18,23 +18,6 @@ namespace ARRunner.Xamarin.SpatialMapping
             FeaturePoint
         }
 
-        private class Ray : NSObject
-        {
-            public SCNVector3 Origin { get; set; }
-
-            public SCNVector3 Direction { get; set; }
-            public Ray()
-            {
-            }
-
-            public Ray(SCNVector3 origin, SCNVector3 direction)
-            {
-                // Initialize
-                Origin = origin;
-                Direction = direction;
-            }
-        }
-
         public static (SCNVector3? hitPoint, HitType hitType) FindNearestWorldPointToScreenPoint(CGPoint point, ARSCNView sceneView, SCNVector3? pointOnPlane)
         {
             var planeHitPosition = HitTestExistingPlanes(point, sceneView);
@@ -87,7 +70,7 @@ namespace ARRunner.Xamarin.SpatialMapping
                 return null; //results.ToArray();
             }
 
-            var ray = HitTestRayFromScreenPos(sceneView, point);
+            var ray = sceneView.HitTestRayFromScreenPos(point);
             if (ray == null)
             {
                 return null; //results.ToArray();
@@ -162,94 +145,6 @@ namespace ARRunner.Xamarin.SpatialMapping
         //    return results.ToArray();
         //}
 
-        public static SCNVector3? HitTestWithInfiniteHorizontalPlane(CGPoint point, ARSCNView sceneView, SCNVector3 pointOnPlane)
-        {
-            if (sceneView.Session == null || ARGamePlay.CurrentFrame == null)
-            {
-                return null;
-            }
-
-            var currentFrame = ARGamePlay.CurrentFrame;
-
-            var ray = HitTestRayFromScreenPos(sceneView, point);
-            if (ray == null)
-            {
-                return null;
-            };
-
-            // Do not intersect with planes above the camera or if the ray is almost parallel to the plane.
-            if (ray.Direction.Y > -0.03f)
-            {
-                return null;
-            }
-
-            return RayIntersectionWithHorizontalPlane(ray.Origin, ray.Direction, pointOnPlane.Y);
-        }
-
-        private static Ray HitTestRayFromScreenPos(ARSCNView sceneView, CGPoint point)
-        {
-            //if (sceneView.Session == null || ViewController.CurrentFrame == null)
-            //{
-            //    return null;
-            //}
-
-            var frame = sceneView.Session.CurrentFrame;
-            //var frame = ViewController.CurrentFrame;
-            //if (frame == null || frame.Camera == null || frame.Camera.Transform == null)
-            //{
-            //    return null;
-            //}
-
-            var cameraPos = SCNVector3Ex.PositionFromTransform(frame.Camera.Transform);
-
-            // Note: z: 1.0 will unproject() the screen position to the far clipping plane.
-            var positionVec = new SCNVector3((float)point.X, (float)point.Y, 1.0f);
-            var screenPosOnFarClippingPlane = sceneView.UnprojectPoint(positionVec);
-
-            var rayDirection = screenPosOnFarClippingPlane - cameraPos; //screenPosOnFarClippingPlane.Subtract(cameraPos);
-            rayDirection.Normalize();
-
-            return new Ray(cameraPos, rayDirection);
-        }
-
-        public static SCNVector3? RayIntersectionWithHorizontalPlane(SCNVector3 rayOrigin, SCNVector3 direction, float planeY)
-        {
-            // Normalize direction
-            direction = direction.Normalized();
-
-            // Special case handling: Check if the ray is horizontal as well.
-            if (direction.Y == 0)
-            {
-                if (rayOrigin.Y == planeY)
-                {
-                    // The ray is horizontal and on the plane, thus all points on the ray intersect with the plane.
-                    // Therefore we simply return the ray origin.
-                    return rayOrigin;
-                }
-                else
-                {
-                    // The ray is parallel to the plane and never intersects.
-                    return null;
-                }
-            }
-
-            // The distance from the ray's origin to the intersection point on the plane is:
-            //   (pointOnPlane - rayOrigin) dot planeNormal
-            //  --------------------------------------------
-            //          direction dot planeNormal
-
-            // Since we know that horizontal planes have normal (0, 1, 0), we can simplify this to:
-            var dist = (planeY - rayOrigin.Y) / direction.Y;
-
-            // Do not return intersections behind the ray's origin.
-            if (dist < 0)
-            {
-                return null;
-            }
-
-            // Return the intersection point.
-            return rayOrigin.Add(direction * dist);
-        }
 
 
     }
