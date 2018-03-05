@@ -102,12 +102,12 @@ namespace ARRunner.Xamarin.Game
                 {
                     if (TwoFingerTouchEvent != null)
                     {
-                        var firstTouchData = (UITouch)touches.First();
+                        var firstTouchData = (UITouch)touches.ElementAt(0);
                         var secondTouchData = currentTouches[1];
                         if (currentTouches[1] == firstTouchData)
                         {
                             firstTouchData = currentTouches[1];
-                            secondTouchData = (UITouch)touches.First();
+                            secondTouchData = (UITouch)touches.ElementAt(0);
                         }
                         var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Change);
                         TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
@@ -121,8 +121,8 @@ namespace ARRunner.Xamarin.Game
                         var secondTouchData = (UITouch)touches.ElementAt(1);
                         if (currentTouches[1] == firstTouchData)
                         {
-                            firstTouchData = currentTouches[1];
-                            secondTouchData = (UITouch)touches.First();
+                            firstTouchData = (UITouch)touches.ElementAt(1);
+                            secondTouchData = (UITouch)touches.ElementAt(0);
                         }
                         var touchData = new TwoFingerTouch(0, firstTouchData.LocationInView(view), secondTouchData.LocationInView(view), GestureState.Change);
                         TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
