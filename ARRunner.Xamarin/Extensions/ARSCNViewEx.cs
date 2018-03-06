@@ -18,10 +18,10 @@ namespace ARRunner.Xamarin.Extensions
 
             var frame = ARGamePlay.CurrentFrame;
             //var frame = ViewController.CurrentFrame;
-            //if (frame == null || frame.Camera == null || frame.Camera.Transform == null)
-            //{
-            //    return null;
-            //}
+            if (frame == null || frame.Camera == null || frame.Camera.Transform == null)
+            {
+                return null;
+            }
 
             var cameraPos = SCNVector3Ex.PositionFromTransform(frame.Camera.Transform);
 

@@ -30,7 +30,7 @@ namespace ARRunner.Xamarin.Game
 
         public void TouchesBegan(NSSet touches, UIEvent evt)
         {
-            Debug.WriteLine("TouchesBegan: " + touches.Count);
+            //Debug.WriteLine("TouchesBegan: " + touches.Count);
 
             if(touches.Count == 1 && currentTouchType == TouchType.None)
             {
@@ -87,7 +87,7 @@ namespace ARRunner.Xamarin.Game
                 }
                 currentTouchType = TouchType.None;
             }
-            Debug.WriteLine("TouchesBegan: type: " + currentTouchType);
+            //Debug.WriteLine("TouchesBegan: type: " + currentTouchType);
         }
 
         public void TouchesMoved(NSSet touches, UIEvent evt)
@@ -133,7 +133,7 @@ namespace ARRunner.Xamarin.Game
 
         public void TouchesEnded(NSSet touches, UIEvent evt)
         {
-            Debug.WriteLine("TouchesEnded: " + touches.Count);
+            //Debug.WriteLine("TouchesEnded: " + touches.Count);
 
             if (touches.Count == 1 && currentTouchType == TouchType.SingleTouch)
             {
@@ -158,13 +158,13 @@ namespace ARRunner.Xamarin.Game
 
                 currentTouchType = TouchType.None;
            }
-            Debug.WriteLine("TouchesEnded: type: " + currentTouchType);
+           //Debug.WriteLine("TouchesEnded: type: " + currentTouchType);
 
         }
 
         public void TouchesCancelled(NSSet touches, UIEvent evt)
         {
-            Debug.WriteLine("TouchesCancelled: " + touches.Count);
+            //Debug.WriteLine("TouchesCancelled: " + touches.Count);
         }
     }
 }

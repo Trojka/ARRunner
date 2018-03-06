@@ -18,7 +18,7 @@ namespace ARRunner.Xamarin.SpatialMapping
             if(!_knownObjects.ContainsKey(id))
             {
                 _knownObjects.Add(id, spatialObject);
-                Debug.WriteLine("Added new spatial object to store");
+                //Debug.WriteLine("Added new spatial object to store");
                 HandleStoreChanged();
                 return;
             }
@@ -31,7 +31,7 @@ namespace ARRunner.Xamarin.SpatialMapping
         {
             if (!_knownObjects.ContainsKey(id))
             {
-                Debug.WriteLine("Removed spatial object from store");
+                //Debug.WriteLine("Removed spatial object from store");
                 return;
             }
 
