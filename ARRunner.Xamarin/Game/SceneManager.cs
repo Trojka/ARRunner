@@ -79,15 +79,15 @@ namespace ARRunner.Xamarin.Game
             runnerPositionOnDoubleTouch = _runnerNode.Position;
             runnerFieldEulerAnglesOnDoubleTouch = _fieldNode.EulerAngles;
 
-            Debug.WriteLine("runnerPositionOnDoubleTouch: " + runnerPositionOnDoubleTouch.ToString());
-            Debug.WriteLine("runnerFieldEulerAnglesOnDoubleTouch: " + runnerFieldEulerAnglesOnDoubleTouch.ToString());
+            //Debug.WriteLine("runnerPositionOnDoubleTouch: " + runnerPositionOnDoubleTouch.ToString());
+            //Debug.WriteLine("runnerFieldEulerAnglesOnDoubleTouch: " + runnerFieldEulerAnglesOnDoubleTouch.ToString());
 
             doubleTouchInitPosition = (coord1 + coord2) / 2;
             var len = (coord2 - coord1).Length;
             var zcomp = (coord2 - coord1).Z;
             doubleTouchInitEulerAnglesY = (float)Math.Acos(zcomp / len);
 
-            Debug.WriteLine("doubleTouchInitPosition: " + doubleTouchInitPosition.ToString());
+            //Debug.WriteLine("doubleTouchInitPosition: " + doubleTouchInitPosition.ToString());
         }
 
         public void RotateRunnerField(SCNVector3 coord1, SCNVector3 coord2)
@@ -97,10 +97,15 @@ namespace ARRunner.Xamarin.Game
             var doubleTouchNewPosition = (coord1 + coord2) / 2;
             var len = (coord2 - coord1).Length;
             var zcomp = (coord2 - coord1).Z;
-            var doubleTouchNewEulerAngles = (float)Math.Acos(zcomp / len);
+            var doubleTouchNewEulerAnglesY = (float)Math.Acos(zcomp / len);
+
+            //Debug.WriteLine("RotateRunnerField: coord1:" + coord1.ToString() + ", coord2:" + coord2.ToString() + ", len:" + len + ", zcomp:" + zcomp + ", doubleTouchNewEulerAnglesY:" + doubleTouchNewEulerAnglesY);
 
             var runnerNewPosition = runnerPositionOnDoubleTouch + (doubleTouchNewPosition - doubleTouchInitPosition);
-            var runnerFieldNewEulerAngles = runnerFieldEulerAnglesOnDoubleTouch + new SCNVector3(0, doubleTouchNewEulerAngles - doubleTouchInitEulerAnglesY.Value, 0);
+            var runnerFieldNewEulerAngles = runnerFieldEulerAnglesOnDoubleTouch + new SCNVector3(0, doubleTouchNewEulerAnglesY - doubleTouchInitEulerAnglesY.Value, 0);
+
+            //Debug.WriteLine("runnerNewPosition: " + runnerNewPosition.ToString());
+            //Debug.WriteLine("runnerFieldNewEulerAngles: " + runnerFieldNewEulerAngles.ToString());
 
             _runnerNode.Position = runnerNewPosition.Value;
             _fieldNode.Position = runnerNewPosition.Value;
