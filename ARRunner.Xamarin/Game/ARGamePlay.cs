@@ -4,6 +4,7 @@ using ARKit;
 using ARRunner.Xamarin.Extensions;
 using ARRunner.Xamarin.SpatialMapping;
 using CoreGraphics;
+using SceneKit;
 
 namespace ARRunner.Xamarin.Game
 {
@@ -72,7 +73,7 @@ namespace ARRunner.Xamarin.Game
             if(State == GameState.StartPositioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
             {
                 var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, sceneManager.RunnerFieldPosition.Value);
-                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, sceneManager.RunnerFieldPosition.Value);
+                SCNVector3? scenePoint2 = /*new SCNVector3(0, 0, 0);*/ SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, sceneManager.RunnerFieldPosition.Value);
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
@@ -105,6 +106,23 @@ namespace ARRunner.Xamarin.Game
             {
                 State = GameState.Placement;
             }
+
+            //if (State == GameState.StartPositioning && e.Value.State == GestureState.Start)
+            //{
+            //    twoFingerTouchPoint1 = e.Value.Coord;
+            //}
+            //if (State == GameState.Positioning && e.Value.State == GestureState.Change)
+            //{
+            //    twoFingerTouchPoint1 = e.Value.Coord;
+            //}
+            //if (State == GameState.Positioning && e.Value.State == GestureState.End)
+            //{
+            //    twoFingerTouchPoint1 = null;
+            //    twoFingerTouchPoint2 = null;
+
+            //    State = GameState.StartPositioning;
+            //}
+
         }
 
         CGPoint? twoFingerTouchPoint1;
