@@ -17,10 +17,16 @@ namespace ARRunner.Xamarin.Game
             Placement,
             StartPositioning,
             Positioning,
-            Start
+            StartCountDown,
+            CountDown,
+            Start,
+            GameOver
         }
 
-        SceneManager sceneManager = new SceneManager();
+        TimeSpan CountDown = new TimeSpan(0, 0, 5);
+        DateTime _timeToStart = DateTime.MaxValue;
+
+        SceneManager _sceneManager = new SceneManager();
         static private ARFrame currentFrame;
 
         static public ARFrame CurrentFrame
@@ -63,37 +69,52 @@ namespace ARRunner.Xamarin.Game
                 if (worldPos.hitType == PlaneFinding.HitType.None)
                     return;
 
-                sceneManager.PlaceRunnerInSceneAtPosition(SceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.RunnerState.Preparing : SceneManager.RunnerState.Fixed);
+                _sceneManager.PlaceRunnerInSceneAtPosition(SceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.RunnerState.Preparing : SceneManager.RunnerState.Fixed);
             }
             if(State == GameState.Placement)
             {
-                sceneManager.FixRunnerAtCurrentPosition(SceneManager.RunnerState.Ready);
-                sceneManager.PlaceRunnerField(SceneView.Scene);
+                _sceneManager.FixRunnerAtCurrentPosition(SceneManager.RunnerState.Ready);
+                _sceneManager.PlaceRunnerField(SceneView.Scene);
                 State = GameState.StartPositioning;
             }
             if(State == GameState.StartPositioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
             {
-                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, sceneManager.RunnerFieldPosition.Value);
-                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, sceneManager.RunnerFieldPosition.Value);
+                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, _sceneManager.RunnerFieldPosition.Value);
+                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, _sceneManager.RunnerFieldPosition.Value);
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
-                    sceneManager.InitRotateRunnerField(SceneView.Scene, scenePoint1.Value, scenePoint2.Value);
+                    _sceneManager.InitRotateRunnerField(SceneView.Scene, scenePoint1.Value, scenePoint2.Value);
 
                     State = GameState.Positioning;
                 }
             }
             if(State == GameState.Positioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
             {
-                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, sceneManager.RunnerFieldPosition.Value);
-                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, sceneManager.RunnerFieldPosition.Value);
+                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, _sceneManager.RunnerFieldPosition.Value);
+                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, _sceneManager.RunnerFieldPosition.Value);
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString());
                     //Debug.WriteLine("scenePoint2: " + scenePoint2.ToString());
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString() + ", scenePoint2: " + scenePoint2.ToString() + " - X: " + diff.X + ", Z: " + diff.Z + ", angle: " + (angle * 180 / Math.PI));
-                    sceneManager.RotateRunnerField(scenePoint1.Value, scenePoint2.Value);
+                    _sceneManager.RotateRunnerField(scenePoint1.Value, scenePoint2.Value);
+                }
+            }
+            if(State == GameState.StartCountDown)
+            {
+                _timeToStart = DateTime.Now;
+                _sceneManager.StartCountDown();
+
+                State = GameState.CountDown;
+            }
+            if(State == GameState.CountDown)
+            {
+                if((DateTime.Now - _timeToStart) > CountDown)
+                {
+                    _sceneManager.CanStartRun();
+                    State = GameState.Start;
                 }
             }
         }
@@ -107,7 +128,7 @@ namespace ARRunner.Xamarin.Game
             }
             if (State == GameState.StartPositioning && e.Value.State == GestureState.End)
             {
-                State = GameState.Start;
+                State = GameState.StartCountDown;
             }
         }
 
@@ -137,6 +158,34 @@ namespace ARRunner.Xamarin.Game
                 State = GameState.StartPositioning;
             }
 
+        }
+
+        public void LeftFoot()
+        {
+            if(State == GameState.CountDown)
+            {
+                _sceneManager.FalseStart();
+                State = GameState.GameOver;
+            }
+
+            if(State == GameState.Start)
+            {
+                _sceneManager.RunnerStep();
+            }
+        }
+
+        public void RightFoot()
+        {
+            if (State == GameState.CountDown)
+            {
+                _sceneManager.FalseStart();
+                State = GameState.GameOver;
+            }
+
+            if (State == GameState.Start)
+            {
+                _sceneManager.RunnerStep();
+            }
         }
     }
 }

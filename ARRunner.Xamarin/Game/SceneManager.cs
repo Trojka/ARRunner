@@ -19,6 +19,8 @@ namespace ARRunner.Xamarin.Game
         SCNNode _runnerNode = null;
         SCNNode _fieldNode = null;
 
+        float _speed = 0.01f;
+
         public SCNVector3? RunnerFieldPosition
         {
             get { return _fieldNode?.Position; }
@@ -38,12 +40,12 @@ namespace ARRunner.Xamarin.Game
             }
 
             _runnerNode.Position = position;
-            _runnerNode.Geometry.Materials.First().Diffuse.Contents = state == RunnerState.Fixed ? UIColor.Red : UIColor.Orange;
+            _runnerNode.Geometry.Materials.First().Diffuse.Contents = (state == RunnerState.Fixed) ? UIColor.Red : UIColor.Orange;
         }
 
         public void FixRunnerAtCurrentPosition(RunnerState ready)
         {
-            _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
+            _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.White;
         }
 
         public void PlaceRunnerField(SCNScene scene)
@@ -59,8 +61,8 @@ namespace ARRunner.Xamarin.Game
             scene.RootNode.AddChildNode(_fieldNode);
         }
 
-        SCNNode f1Node;
-        SCNNode f2Node;
+        //SCNNode f1Node;
+        //SCNNode f2Node;
 
         SCNVector3? runnerPositionOnDoubleTouch;
         SCNVector3? runnerFieldEulerAnglesOnDoubleTouch;
@@ -128,6 +130,26 @@ namespace ARRunner.Xamarin.Game
             _fieldNode.Position = runnerNewPosition.Value;
             _fieldNode.EulerAngles = runnerFieldNewEulerAngles.Value;
 
+        }
+
+        public void StartCountDown()
+        {
+            _fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Red;
+        }
+
+        public void CanStartRun()
+        {
+            _fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
+        }
+
+        public void FalseStart()
+        {
+            _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Red;
+        }
+
+        public void RunnerStep()
+        {
+            _runnerNode.Position = _runnerNode.Position + new SCNVector3(_speed, 0, _speed);
         }
     }
 }

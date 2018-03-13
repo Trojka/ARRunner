@@ -8,6 +8,7 @@ using Foundation;
 using ARRunner.Xamarin.SpatialQuerying;
 using System.Collections.Generic;
 using ARRunner.Xamarin.Game;
+using System.Diagnostics;
 
 namespace ARRunner.Xamarin
 {
@@ -237,15 +238,15 @@ namespace ARRunner.Xamarin
         [Action("leftclicked:")]
         void LeftClicked(NSObject sender)
         {
-            //var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
-            //scnPlane.Materials.First().Diffuse.Contents = UIColor.Orange;        
+            Debug.WriteLine("Left clicked");
+            gamePlay.LeftFoot();
         }
 
         [Action("rightclicked:")]
         void RightClicked(NSObject sender)
         {
-            //var scnPlane = _viewDelegate.FindPlane(_spatialObjectId);
-            //scnPlane.Materials.First().Diffuse.Contents = UIColor.Magenta;        
+            Debug.WriteLine("Right clicked");
+            gamePlay.RightFoot();
         }
     }
 }
