@@ -16,7 +16,8 @@ namespace ARRunner.Xamarin.Game
             Scanning,
             Placement,
             StartPositioning,
-            Positioning
+            Positioning,
+            Start
         }
 
         SceneManager sceneManager = new SceneManager();
@@ -73,7 +74,7 @@ namespace ARRunner.Xamarin.Game
             if(State == GameState.StartPositioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
             {
                 var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, sceneManager.RunnerFieldPosition.Value);
-                SCNVector3? scenePoint2 = /*new SCNVector3(0, 0, 0);*/ SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, sceneManager.RunnerFieldPosition.Value);
+                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, sceneManager.RunnerFieldPosition.Value);
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
@@ -89,10 +90,8 @@ namespace ARRunner.Xamarin.Game
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
-                    //var diff = scenePoint2.Value - scenePoint1.Value;
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString());
                     //Debug.WriteLine("scenePoint2: " + scenePoint2.ToString());
-                    //var angle = Math.Acos(diff.X / diff.Z);
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString() + ", scenePoint2: " + scenePoint2.ToString() + " - X: " + diff.X + ", Z: " + diff.Z + ", angle: " + (angle * 180 / Math.PI));
                     sceneManager.RotateRunnerField(scenePoint1.Value, scenePoint2.Value);
                 }
@@ -101,34 +100,20 @@ namespace ARRunner.Xamarin.Game
 
         public void GestureManager_SingleFingerTouchEvent(object sender, Util.EventArgs<Game.SingleFingerTouch> e)
         {
-            //Debug.WriteLine("GestureManager_SingleFingerTouchEvent: " + e.Value.State);
+            Debug.WriteLine("GestureManager_SingleFingerTouchEvent: State: " + State + ", EventState: " + e.Value.State);
             if(State == GameState.Scanning && e.Value.State == GestureState.End)
             {
                 State = GameState.Placement;
             }
-
-            //if (State == GameState.StartPositioning && e.Value.State == GestureState.Start)
-            //{
-            //    twoFingerTouchPoint1 = e.Value.Coord;
-            //}
-            //if (State == GameState.Positioning && e.Value.State == GestureState.Change)
-            //{
-            //    twoFingerTouchPoint1 = e.Value.Coord;
-            //}
-            //if (State == GameState.Positioning && e.Value.State == GestureState.End)
-            //{
-            //    twoFingerTouchPoint1 = null;
-            //    twoFingerTouchPoint2 = null;
-
-            //    State = GameState.StartPositioning;
-            //}
-
+            if (State == GameState.StartPositioning && e.Value.State == GestureState.End)
+            {
+                State = GameState.Start;
+            }
         }
 
         CGPoint? twoFingerTouchPoint1;
         CGPoint? twoFingerTouchPoint2;
 
-        private int count = 0;
         public void GestureManager_TwoFingerTouchEvent(object sender, Util.EventArgs<Game.TwoFingerTouch> e)
         {
             //Debug.WriteLine("GestureManager_TwoFingerTouchEvent: " + e.Value.State);
@@ -140,13 +125,6 @@ namespace ARRunner.Xamarin.Game
 
             if (State == GameState.Positioning && e.Value.State == GestureState.Change)
             {
-                //count++;
-                //if(count == 100)
-                //{
-                //    Debug.WriteLine("twoFingerTouchPoint1: " + twoFingerTouchPoint1.ToString() + ", twoFingerTouchPoint2: " + twoFingerTouchPoint2.ToString());
-                //    count = 0;
-                //}
-
                 twoFingerTouchPoint1 = e.Value.Coord1;
                 twoFingerTouchPoint2 = e.Value.Coord2;
             }

@@ -42,7 +42,7 @@ namespace ARRunner.Xamarin.Game
                 var handle = touch.Handle;
                 var viewTouchPoint = touch.LocationInView(view);
                 //currentTouches.Add((touch.Handle, viewTouchPoint));
-                Debug.WriteLine("TouchesBegan: " + touches.Count + ", TouchType.None, Handle: " + handle + ", Point: " + viewTouchPoint);
+                Debug.WriteLine("TouchesBegan (TouchType.None): " + touches.Count + ", TouchType: " + currentTouchType + ", Handle: " + handle + ", Point: " + viewTouchPoint);
 
                 touchDictionary.Add(handle, viewTouchPoint);
                 touchList.Add(handle);
@@ -243,6 +243,7 @@ namespace ARRunner.Xamarin.Game
 
             if (touches.Count == 1 && currentTouchType == TouchType.SingleTouch)
             {
+                Debug.WriteLine("TouchesEnded (TouchType.SingleTouch): " + touches.Count);
                 if (SingleFingerTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
