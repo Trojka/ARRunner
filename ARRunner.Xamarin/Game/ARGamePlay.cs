@@ -117,6 +117,10 @@ namespace ARRunner.Xamarin.Game
                     State = GameState.Start;
                 }
             }
+            if(State == GameState.Start)
+            {
+                _sceneManager.Run();
+            }
         }
 
         public void GestureManager_SingleFingerTouchEvent(object sender, Util.EventArgs<Game.SingleFingerTouch> e)
@@ -160,6 +164,13 @@ namespace ARRunner.Xamarin.Game
 
         }
 
+        enum Foot
+        {
+            Left,
+            Right
+        }
+
+        Foot _lastFoot = Foot.Left;
         public void LeftFoot()
         {
             if(State == GameState.CountDown)
@@ -170,7 +181,12 @@ namespace ARRunner.Xamarin.Game
 
             if(State == GameState.Start)
             {
-                _sceneManager.RunnerStep();
+                if (_lastFoot == Foot.Left)
+                    _sceneManager.Stumble();
+                else
+                    _sceneManager.RunnerStep();
+
+                _lastFoot = Foot.Left;
             }
         }
 
@@ -184,7 +200,12 @@ namespace ARRunner.Xamarin.Game
 
             if (State == GameState.Start)
             {
-                _sceneManager.RunnerStep();
+                if (_lastFoot == Foot.Right)
+                    _sceneManager.Stumble();
+                else
+                    _sceneManager.RunnerStep();
+
+                _lastFoot = Foot.Right;
             }
         }
     }
