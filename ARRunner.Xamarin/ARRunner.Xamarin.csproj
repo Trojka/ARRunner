@@ -131,6 +131,7 @@
     <Compile Include="Game\TwoFingerTouch.cs" />
     <Compile Include="Extensions\ARSCNViewEx.cs" />
     <Compile Include="SpatialMapping\Ray.cs" />
+    <Compile Include="Game\RunnerPhysics.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\candle\candle.scn" />
