@@ -188,8 +188,10 @@ namespace ARRunner.Xamarin.Game
             _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Orange;
         }
 
-        public void Run()
+        public void MoveDistance(double d)
         {
+            Debug.Print("MoveDistance: d=" + d + ", speed=" + _speed);
+
             if (_runnerState == RunnerState.Finished)
                 return;
 

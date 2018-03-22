@@ -27,6 +27,7 @@ namespace ARRunner.Xamarin.Game
         DateTime _timeToStart = DateTime.MaxValue;
 
         SceneManager _sceneManager = new SceneManager();
+        RunnerPhysics _physics = new RunnerPhysics();
         static private ARFrame currentFrame;
 
         static public ARFrame CurrentFrame
@@ -119,7 +120,8 @@ namespace ARRunner.Xamarin.Game
             }
             if(State == GameState.Start)
             {
-                _sceneManager.Run();
+                var d = _physics.DistanceTravelled(DateTime.Now);
+                _sceneManager.MoveDistance(d);
             }
         }
 
