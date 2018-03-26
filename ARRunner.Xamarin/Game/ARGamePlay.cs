@@ -28,6 +28,7 @@ namespace ARRunner.Xamarin.Game
 
         SceneManager _sceneManager = new SceneManager();
         RunnerPhysics _physics = new RunnerPhysics();
+
         static private ARFrame currentFrame;
 
         static public ARFrame CurrentFrame
@@ -120,14 +121,14 @@ namespace ARRunner.Xamarin.Game
             }
             if(State == GameState.Start)
             {
-                var d = _physics.DistanceTravelled(DateTime.Now);
+                var d = (float)_physics.DistanceTravelled(DateTime.Now);
                 _sceneManager.MoveDistance(d);
             }
         }
 
         public void GestureManager_SingleFingerTouchEvent(object sender, Util.EventArgs<Game.SingleFingerTouch> e)
         {
-            Debug.WriteLine("GestureManager_SingleFingerTouchEvent: State: " + State + ", EventState: " + e.Value.State);
+            //Debug.WriteLine("GestureManager_SingleFingerTouchEvent: State: " + State + ", EventState: " + e.Value.State);
             if(State == GameState.Scanning && e.Value.State == GestureState.End)
             {
                 State = GameState.Placement;
@@ -184,9 +185,15 @@ namespace ARRunner.Xamarin.Game
             if(State == GameState.Start)
             {
                 if (_lastFoot == Foot.Left)
-                    _sceneManager.Stumble();
+                {
+                    //_sceneManager.Stumble();
+                    _physics.Stumble();
+                }
                 else
-                    _sceneManager.RunnerStep();
+                {
+                    //_sceneManager.RunnerStep();
+                    _physics.ApplyForce();
+                }
 
                 _lastFoot = Foot.Left;
             }
@@ -203,9 +210,15 @@ namespace ARRunner.Xamarin.Game
             if (State == GameState.Start)
             {
                 if (_lastFoot == Foot.Right)
-                    _sceneManager.Stumble();
+                {
+                    //_sceneManager.Stumble();
+                    _physics.Stumble();
+                }
                 else
-                    _sceneManager.RunnerStep();
+                {
+                    //_sceneManager.RunnerStep();
+                    _physics.ApplyForce();
+                }
 
                 _lastFoot = Foot.Right;
             }

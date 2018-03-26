@@ -25,7 +25,7 @@ namespace ARRunner.Xamarin.Game
         static float _fieldLength = 0.4f;
         static float _runnerInitialPosOnField = 0.05f;
 
-        float _speed = 0.0f;
+        //float _speed = 0.0f;
         float _fieldToRunnerOffset = _fieldLength / 2 - _runnerInitialPosOnField;
         SCNVector3 _runnerDirection = new SCNVector3(1, 0, 0);
 
@@ -167,35 +167,35 @@ namespace ARRunner.Xamarin.Game
             _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Red;
         }
 
-        public void RunnerStep()
-        {
-            if (_runnerState == RunnerState.Finished)
-                return;
+        //public void RunnerStep()
+        //{
+        //    if (_runnerState == RunnerState.Finished)
+        //        return;
 
-            if (DateTime.Now - _stumbleTimeStamp <= _stumbleDuration)
-                return;
+        //    if (DateTime.Now - _stumbleTimeStamp <= _stumbleDuration)
+        //        return;
 
-            _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.White;
-            _speed = _speed + 0.0005f;
-        }
+        //    _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.White;
+        //    _speed = _speed + 0.0005f;
+        //}
 
-        TimeSpan _stumbleDuration = new TimeSpan(0, 0, 0, 0, 500);
-        DateTime _stumbleTimeStamp = DateTime.MaxValue;
+        //TimeSpan _stumbleDuration = new TimeSpan(0, 0, 0, 0, 500);
+        //DateTime _stumbleTimeStamp = DateTime.MaxValue;
         public void Stumble()
         {
-            _stumbleTimeStamp = DateTime.Now;
-            _speed = _speed / 2;
+            //_stumbleTimeStamp = DateTime.Now;
+            //_speed = _speed / 2;
             _runnerNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Orange;
         }
 
-        public void MoveDistance(double d)
+        public void MoveDistance(float d)
         {
-            Debug.Print("MoveDistance: d=" + d + ", speed=" + _speed);
 
             if (_runnerState == RunnerState.Finished)
                 return;
 
-            _runnerNode.Position = _runnerNode.Position + (_runnerDirection * _speed);
+            //_runnerNode.Position = _runnerNode.Position + (_runnerDirection * _speed);
+            _runnerNode.Position = _runnerNode.Position + (_runnerDirection * d);
             if ((_runnerNode.Position - _runnerStartPosition).Length > (_fieldLength - _runnerInitialPosOnField))
             {
                 _runnerState = RunnerState.Finished;
