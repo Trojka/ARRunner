@@ -4,18 +4,8 @@ using System.Diagnostics;
 namespace ARRunner.Xamarin.Game
 {
     // This is a simplified model.
-    public class RunnerPhysics
+    public class EntityPhysics
     {
-        //// https://en.wikipedia.org/wiki/Density_of_air
-        //const double DensityAir = 1.225d; // kg/m3
-
-        //// http://www.taylors.edu.my/EURECA/2014/downloads/02.pdf
-        //const double DragCoeffHumanBodyStart = 0.6d;      // Squating
-        //const double DragCoeffHumanBodyRunning = 1.2d;    // Standing
-
-        //const double AreaHumanBodyStart = 0.6d;      // Estimate
-        //const double AreaHumanBodyRunning = 1d;      // Height * Width = 2 * 0.5
-
         DateTime? _currentTime = null;
         double _currentSpeed = 0.0d;
         double _currentForce = 0.0d;
@@ -56,7 +46,7 @@ namespace ARRunner.Xamarin.Game
 
             // The dragforce is
             // F = ((density * dragCoeff * Area) / 2) * speed^2
-            double dragCoeff = 2000; //DensityAir * DragCoeffHumanBodyRunning * AreaHumanBodyRunning / 2; // = 0.735
+            double dragCoeff = 2000;
             double dragForce = dragCoeff * Math.Pow(_currentSpeed, 2);
 
             _currentForce = -dragForce;

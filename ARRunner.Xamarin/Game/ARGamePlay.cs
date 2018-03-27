@@ -27,7 +27,7 @@ namespace ARRunner.Xamarin.Game
         DateTime _timeToStart = DateTime.MaxValue;
 
         SceneManager _sceneManager = new SceneManager();
-        RunnerPhysics _physics = new RunnerPhysics();
+        EntityPhysics _physics = new EntityPhysics();
 
         static private ARFrame currentFrame;
 
@@ -71,37 +71,37 @@ namespace ARRunner.Xamarin.Game
                 if (worldPos.hitType == PlaneFinding.HitType.None)
                     return;
 
-                _sceneManager.PlaceRunnerInSceneAtPosition(SceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.RunnerState.Preparing : SceneManager.RunnerState.Fixed);
+                _sceneManager.PlaceEntityInSceneAtPosition(SceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.EntityState.Preparing : SceneManager.EntityState.Fixed);
             }
             if(State == GameState.Placement)
             {
-                _sceneManager.FixRunnerAtCurrentPosition(SceneManager.RunnerState.Ready);
-                _sceneManager.PlaceRunnerField(SceneView.Scene);
+                _sceneManager.FixEntityAtCurrentPosition(SceneManager.EntityState.Ready);
+                _sceneManager.PlaceEntityField(SceneView.Scene);
                 State = GameState.StartPositioning;
             }
             if(State == GameState.StartPositioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
             {
-                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, _sceneManager.RunnerFieldPosition.Value);
-                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, _sceneManager.RunnerFieldPosition.Value);
+                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, _sceneManager.EntityFieldPosition.Value);
+                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, _sceneManager.EntityFieldPosition.Value);
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
-                    _sceneManager.InitRotateRunnerField(SceneView.Scene, scenePoint1.Value, scenePoint2.Value);
+                    _sceneManager.InitRotateEntityField(SceneView.Scene, scenePoint1.Value, scenePoint2.Value);
 
                     State = GameState.Positioning;
                 }
             }
             if(State == GameState.Positioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
             {
-                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, _sceneManager.RunnerFieldPosition.Value);
-                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, _sceneManager.RunnerFieldPosition.Value);
+                var scenePoint1 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint1.Value, _sceneManager.EntityFieldPosition.Value);
+                var scenePoint2 = SceneView.HitTestWithInfiniteHorizontalPlane(twoFingerTouchPoint2.Value, _sceneManager.EntityFieldPosition.Value);
 
                 if(scenePoint1.HasValue && scenePoint2.HasValue)
                 {
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString());
                     //Debug.WriteLine("scenePoint2: " + scenePoint2.ToString());
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString() + ", scenePoint2: " + scenePoint2.ToString() + " - X: " + diff.X + ", Z: " + diff.Z + ", angle: " + (angle * 180 / Math.PI));
-                    _sceneManager.RotateRunnerField(scenePoint1.Value, scenePoint2.Value);
+                    _sceneManager.RotateEntityField(scenePoint1.Value, scenePoint2.Value);
                 }
             }
             if(State == GameState.StartCountDown)
@@ -186,12 +186,11 @@ namespace ARRunner.Xamarin.Game
             {
                 if (_lastFoot == Foot.Left)
                 {
-                    //_sceneManager.Stumble();
+                    _sceneManager.Stumble();
                     _physics.Stumble();
                 }
                 else
                 {
-                    //_sceneManager.RunnerStep();
                     _physics.ApplyForce();
                 }
 
@@ -211,12 +210,11 @@ namespace ARRunner.Xamarin.Game
             {
                 if (_lastFoot == Foot.Right)
                 {
-                    //_sceneManager.Stumble();
+                    _sceneManager.Stumble();
                     _physics.Stumble();
                 }
                 else
                 {
-                    //_sceneManager.RunnerStep();
                     _physics.ApplyForce();
                 }
 
