@@ -155,5 +155,11 @@
     <SceneKitAsset Include="Resources\Models.scnassets\sharedImages\environment.jpg" />
     <SceneKitAsset Include="Resources\Models.scnassets\sharedImages\environment_blur.exr" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ExhaustReactor.scnp" />
+    <BundleResource Include="Resources\Smoke.scnp" />
+    <BundleResource Include="Resources\smoke.png" />
+    <BundleResource Include="Resources\spark.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
