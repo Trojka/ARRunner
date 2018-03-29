@@ -140,15 +140,16 @@
     <SceneKitAsset Include="Resources\Models.scnassets\sharedImages\environment_blur.exr" />
     <SceneKitAsset Include="Resources\rc_car_texture.png" />
     <SceneKitAsset Include="Resources\tire.jpg" />
+    <SceneKitAsset Include="Models.scnassets\rc_car_texture.png" />
+    <SceneKitAsset Include="Models.scnassets\rc_car.dae" />
+    <SceneKitAsset Include="Resources\rc_car.dae" />
+    <SceneKitAsset Include="Models.scnassets\rc_car_grey_texture.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ExhaustReactor.scnp" />
     <BundleResource Include="Resources\Smoke.scnp" />
     <BundleResource Include="Resources\smoke.png" />
     <BundleResource Include="Resources\spark.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Collada Include="Resources\rc_car.dae" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
