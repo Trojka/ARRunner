@@ -18,13 +18,8 @@ namespace aRCCar.Xamarin.Game
             Finished
         }
 
-        SCNMaterial _greyMaterial = null;
-        SCNMaterial _colorMaterial = null;
-
-        SCNNode _entityNode = null;
+        CarEntity _entityNode = null;
         SCNNode _fieldNode = null;
-
-        SCNNode _wingNode = null;
 
         static float _fieldWidth = 0.1f;
         static float _fieldLength = 0.4f;
@@ -46,66 +41,32 @@ namespace aRCCar.Xamarin.Game
             if (_entityNode == null)
             {
 
-                var car = SCNScene.FromFile("Models.scnassets/rc_car");
-                var carRootNode = car.RootNode.FindChildNode("rccarBody", true);
+                var car = new CarEntity();
+                car.Load();
 
-                _wingNode = carRootNode; //.FindChildNode("wing", true);
+                car.Scale = new SCNVector3(0.01f, 0.01f, 0.01f);
+                car.EulerAngles = new SCNVector3(0, (float)Math.PI / 2, 0);
+                car.Position = position;
 
-                _greyMaterial = new SCNMaterial();
-                _greyMaterial.Diffuse.Contents = UIImage.FromFile("Models.scnassets/rc_car_grey_texture.png");
-
-                _colorMaterial = new SCNMaterial();
-                _colorMaterial.Diffuse.Contents = UIImage.FromFile("Models.scnassets/rc_car_texture.png");
-
-                //var box = new SCNBox() { Width = 0.025f, Height = 0.025f, Length = 0.025f, ChamferRadius = 0.0f };
-
-                //var boxNode = new SCNNode();
-                //boxNode.Geometry = box;
-                //boxNode.Position = position;
-
-                carRootNode.Scale = new SCNVector3(0.01f, 0.01f, 0.01f);
-                carRootNode.EulerAngles = new SCNVector3(0, (float)Math.PI / 2, 0);
-                carRootNode.Position = position;
-
-                _entityNode = carRootNode;
-
-                //SCNVector3 minBB = new SCNVector3();
-                //SCNVector3 maxBB = new SCNVector3();
-                //carRootNode.GetBoundingBox(ref minBB, ref maxBB);
-
-                //scene.RootNode.AddChildNode(carRootNode);
+                _entityNode = car;
                 scene.RootNode.AddChildNode(_entityNode);
             }
 
             _entityNode.Position = position;
 
-            //if(state == EntityState.Fixed)
-            //{
-            //    while (_entityNode.Geometry.Materials.Count() != 0)
-            //        _entityNode.Geometry.RemoveMaterial(0);
-            //    _entityNode.Geometry.InsertMaterial(_greyMaterial, 0);
-
-            //    while (_wingNode.Geometry.Materials.Count() != 0)
-            //        _wingNode.Geometry.RemoveMaterial(0);
-            //    _wingNode.Geometry.InsertMaterial(_greyMaterial, 0);
-
-            //}
-            //else 
-            //{
-            //    while (_entityNode.Geometry.Materials.Count() != 0)
-            //        _entityNode.Geometry.RemoveMaterial(0);
-            //    _entityNode.Geometry.InsertMaterial(_colorMaterial, 0);
-
-            //    while (_wingNode.Geometry.Materials.Count() != 0)
-            //        _wingNode.Geometry.RemoveMaterial(0);
-            //    _wingNode.Geometry.InsertMaterial(_colorMaterial, 0);
-            //}
-            //_entityNode.Geometry.Materials.First().Diffuse.Contents = (state == EntityState.Fixed) ? UIColor.Red : UIColor.Orange;
+            if(state == EntityState.Fixed)
+            {
+                _entityNode.IsEnabled = false;
+            }
+            else 
+            {
+                _entityNode.IsEnabled = true;
+            }
         }
 
         public void FixEntityAtCurrentPosition(EntityState ready)
         {
-            _entityNode.Geometry.Materials.First().Diffuse.Contents = UIColor.White;
+            //_entityNode.Geometry.Materials.First().Diffuse.Contents = UIColor.White;
         }
 
         public void PlaceEntityField(SCNScene scene)
@@ -196,7 +157,6 @@ namespace aRCCar.Xamarin.Game
             if ((_entityNode.Position - _entityStartPosition).Length > (_fieldLength - _entityInitialPosOnField))
             {
                 _entityState = EntityState.Finished;
-                //_entityNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
             }
         }
     }
