@@ -24,6 +24,8 @@ namespace ARRunner.Xamarin.Game
         SCNNode _entityNode = null;
         SCNNode _fieldNode = null;
 
+        SCNNode _wingNode = null;
+
         static float _fieldWidth = 0.1f;
         static float _fieldLength = 0.4f;
         static float _entityInitialPosOnField = 0.05f;
@@ -46,6 +48,8 @@ namespace ARRunner.Xamarin.Game
 
                 var car = SCNScene.FromFile("Models.scnassets/rc_car");
                 var carRootNode = car.RootNode.FindChildNode("rccarBody", true);
+
+                _wingNode = carRootNode; //.FindChildNode("wing", true);
 
                 _greyMaterial = new SCNMaterial();
                 _greyMaterial.Diffuse.Contents = UIImage.FromFile("Models.scnassets/rc_car_grey_texture.png");
@@ -75,18 +79,27 @@ namespace ARRunner.Xamarin.Game
 
             _entityNode.Position = position;
 
-            if(state == EntityState.Fixed)
-            {
-                while (_entityNode.Geometry.Materials.Count() != 0)
-                    _entityNode.Geometry.RemoveMaterial(0);
-                _entityNode.Geometry.InsertMaterial(_greyMaterial, 0);
-            }
-            else 
-            {
-                while (_entityNode.Geometry.Materials.Count() != 0)
-                    _entityNode.Geometry.RemoveMaterial(0);
-                _entityNode.Geometry.InsertMaterial(_colorMaterial, 0);
-            }
+            //if(state == EntityState.Fixed)
+            //{
+            //    while (_entityNode.Geometry.Materials.Count() != 0)
+            //        _entityNode.Geometry.RemoveMaterial(0);
+            //    _entityNode.Geometry.InsertMaterial(_greyMaterial, 0);
+
+            //    while (_wingNode.Geometry.Materials.Count() != 0)
+            //        _wingNode.Geometry.RemoveMaterial(0);
+            //    _wingNode.Geometry.InsertMaterial(_greyMaterial, 0);
+
+            //}
+            //else 
+            //{
+            //    while (_entityNode.Geometry.Materials.Count() != 0)
+            //        _entityNode.Geometry.RemoveMaterial(0);
+            //    _entityNode.Geometry.InsertMaterial(_colorMaterial, 0);
+
+            //    while (_wingNode.Geometry.Materials.Count() != 0)
+            //        _wingNode.Geometry.RemoveMaterial(0);
+            //    _wingNode.Geometry.InsertMaterial(_colorMaterial, 0);
+            //}
             //_entityNode.Geometry.Materials.First().Diffuse.Contents = (state == EntityState.Fixed) ? UIColor.Red : UIColor.Orange;
         }
 
@@ -140,10 +153,10 @@ namespace ARRunner.Xamarin.Game
             var entityNewEulerAngles = entityEulerAnglesOnDoubleTouch + new SCNVector3(0, doubleTouchNewEulerAnglesY - doubleTouchInitEulerAnglesY.Value, 0);
             var entityFieldNewEulerAngles = entityFieldEulerAnglesOnDoubleTouch + new SCNVector3(0, doubleTouchNewEulerAnglesY - doubleTouchInitEulerAnglesY.Value, 0);
 
-            _entityNode.Position = entityNewPosition.Value;
             _entityNode.EulerAngles = entityNewEulerAngles.Value;
+            _entityNode.Position = entityNewPosition.Value;
 
-            var entityAngle = _entityNode.EulerAngles.Y + (Math.PI / 2);
+            var entityAngle = _entityNode.EulerAngles.Y; // + (Math.PI / 2);
             _entityDirection = new SCNVector3((float)Math.Sin(entityAngle), 0, (float)Math.Cos(entityAngle));
 
             _fieldNode.Position = _entityNode.Position + (_entityDirection * _fieldToEntityOffset);
