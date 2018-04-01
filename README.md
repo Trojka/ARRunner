@@ -1,2 +1,2 @@
-# ARRunner
-Running in augmented reality
+# aRCCar
+Car racing in augmented reality
