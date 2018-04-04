@@ -11,9 +11,14 @@ namespace aRCCar.Xamarin.Game
         SCNMaterial _greyMaterial = null;
         SCNMaterial _colorMaterial = null;
 
+        float _modelScale = 0.01f;
+
         SCNNode _carBodyNode = null;
         SCNNode _wingNode = null;
+        SCNNode _pipeNode = null;
 
+        SCNParticleSystem _exhaust;
+        nfloat _configuredBirthRate;
 
         private bool _isEnabled;
 
@@ -27,6 +32,11 @@ namespace aRCCar.Xamarin.Game
 
             _colorMaterial = new SCNMaterial();
             _colorMaterial.Diffuse.Contents = UIImage.FromFile("Models.scnassets/rc_car_texture.png");
+
+            _exhaust = SCNParticleSystem.Create("Exhaust", "Models.scnassets");
+            _configuredBirthRate = _exhaust.BirthRate;
+            _exhaust.BirthRate = 0;
+            //_exhaust.ParticleSize = _modelScale;
         }
 
 		public override void Load()
@@ -35,7 +45,12 @@ namespace aRCCar.Xamarin.Game
 
             _carBodyNode = this.FindChildNode("rccarBody", true);
             _wingNode = this.FindChildNode("wing", true);
+            _pipeNode = this.FindChildNode("pipe", true);
 
+            _pipeNode.AddParticleSystem(_exhaust);
+
+            this.Scale = new SCNVector3(_modelScale, _modelScale, _modelScale);
+            this.EulerAngles = new SCNVector3(0, (float)Math.PI / 2, 0);
 		}
 
         public bool IsEnabled
@@ -52,7 +67,9 @@ namespace aRCCar.Xamarin.Game
                     while (_wingNode.Geometry.Materials.Count() != 0)
                         _wingNode.Geometry.RemoveMaterial(0);
                     _wingNode.Geometry.InsertMaterial(_colorMaterial, 0);
-}
+
+                    _exhaust.BirthRate = _configuredBirthRate;
+                }
                 else 
                 {
                     while (_carBodyNode.Geometry.Materials.Count() != 0)
@@ -62,6 +79,8 @@ namespace aRCCar.Xamarin.Game
                     while (_wingNode.Geometry.Materials.Count() != 0)
                         _wingNode.Geometry.RemoveMaterial(0);
                     _wingNode.Geometry.InsertMaterial(_greyMaterial, 0);
+
+                    _exhaust.BirthRate = 0;
                 }
 
             }
