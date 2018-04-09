@@ -17,6 +17,8 @@ namespace aRCCar.Xamarin
 
         Dictionary<NSUuid, SCNPlane> _planeStore = new Dictionary<NSUuid, SCNPlane>();
 
+        OverlayScene _overlayScene;
+
         protected ViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
@@ -40,7 +42,11 @@ namespace aRCCar.Xamarin
             sceneView.Session = gamePlay.Session;
 
             var scene = new SCNScene();
+
+            _overlayScene = new OverlayScene(sceneView.Bounds.Size);
+
             sceneView.Scene = scene;
+            sceneView.OverlayScene = _overlayScene;
         }
 
         public override void DidReceiveMemoryWarning()

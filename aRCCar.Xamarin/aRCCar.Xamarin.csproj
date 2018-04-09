@@ -127,6 +127,7 @@
     <Compile Include="SpatialMapping\PlaneFinding.cs" />
     <Compile Include="SpatialMapping\Ray.cs" />
     <Compile Include="Game\CarEntity.cs" />
+    <Compile Include="Game\OverlayScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\sharedImages\environment.jpg" />

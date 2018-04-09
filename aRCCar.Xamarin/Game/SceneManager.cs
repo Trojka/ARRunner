@@ -44,8 +44,6 @@ namespace aRCCar.Xamarin.Game
                 var car = new CarEntity();
                 car.Load();
 
-                //car.Scale = new SCNVector3(0.01f, 0.01f, 0.01f);
-                //car.EulerAngles = new SCNVector3(0, (float)Math.PI / 2, 0);
                 car.Position = position;
 
                 _entityNode = car;
