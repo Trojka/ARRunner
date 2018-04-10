@@ -148,6 +148,12 @@
     <BundleResource Include="Resources\Smoke.scnp" />
     <BundleResource Include="Resources\smoke.png" />
     <BundleResource Include="Resources\spark.png" />
+    <BundleResource Include="Resources\piston_scaled.png" />
+    <BundleResource Include="Resources\piston_scaled%402x.png" />
+    <BundleResource Include="Resources\check_scaled.png" />
+    <BundleResource Include="Resources\check_scaled%402x.png" />
+    <BundleResource Include="Resources\phone_scaled.png" />
+    <BundleResource Include="Resources\phone_scaled%402x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

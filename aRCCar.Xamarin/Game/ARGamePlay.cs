@@ -13,6 +13,7 @@ namespace aRCCar.Xamarin.Game
         public enum GameState
         {
             None,
+            PrepareToScan,
             Scanning,
             Placement,
             StartPositioning,
@@ -45,14 +46,21 @@ namespace aRCCar.Xamarin.Game
             }
         }
 
-        public GameState State { get; set; } = GameState.Scanning;
+        public GameState State { get; set; } = GameState.PrepareToScan;
 
         public ARSession Session { get; set; } = new ARSession();
 
         public ARKit.ARSCNView SceneView { get; set; }
 
+        public OverlayScene OverlayScene { get; set; }
+
         public void Update()
         {
+            if(State == GameState.PrepareToScan)
+            {
+                OverlayScene.ShowScanAction();
+                State = GameState.Scanning;
+            }
             if(State == GameState.Scanning)
             {
                 if (Session?.CurrentFrame == null)
@@ -68,8 +76,26 @@ namespace aRCCar.Xamarin.Game
 
                 var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, SceneView, null);
 
-                if (worldPos.hitType == PlaneFinding.HitType.None)
-                    return;
+
+                Debug.WriteLine("GameState.Scanning > worldPos.hitType=" + worldPos.hitType.ToString());
+                if(worldPos.hitType == PlaneFinding.HitType.Plane && !OverlayScene.ScanActionFinished)
+                {
+                    Debug.WriteLine("GameState.Scanning > FinishScanAction");
+                    OverlayScene.FinishScanAction();
+                    OverlayScene.ShowActionPlacement();
+                }
+                else if (worldPos.hitType != PlaneFinding.HitType.Plane)
+                {
+                    if(!OverlayScene.ScanActionShowing)
+                    {
+                        Debug.WriteLine("GameState.Scanning > ShowScanAction");
+                        OverlayScene.FinishActionPlacement();
+                        OverlayScene.ShowScanAction();
+                    }
+
+                    if (worldPos.hitType == PlaneFinding.HitType.None)
+                        return;
+                }
 
                 _sceneManager.PlaceEntityInSceneAtPosition(SceneView.Scene, worldPos.hitPoint.Value, worldPos.hitType == PlaneFinding.HitType.Plane ? SceneManager.EntityState.Preparing : SceneManager.EntityState.Fixed);
             }
@@ -77,6 +103,7 @@ namespace aRCCar.Xamarin.Game
             {
                 _sceneManager.FixEntityAtCurrentPosition(SceneManager.EntityState.Ready);
                 _sceneManager.PlaceEntityField(SceneView.Scene);
+                OverlayScene.FinishActionPlacement();
                 State = GameState.StartPositioning;
             }
             if(State == GameState.StartPositioning && twoFingerTouchPoint1.HasValue && twoFingerTouchPoint2.HasValue)
@@ -108,6 +135,7 @@ namespace aRCCar.Xamarin.Game
             {
                 _timeToStart = DateTime.Now;
                 _sceneManager.StartCountDown();
+                OverlayScene.ShowActionControls();
 
                 State = GameState.CountDown;
             }

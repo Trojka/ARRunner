@@ -44,6 +44,8 @@ namespace aRCCar.Xamarin
             var scene = new SCNScene();
 
             _overlayScene = new OverlayScene(sceneView.Bounds.Size);
+            _overlayScene.UserInteractionEnabled = false;
+            gamePlay.OverlayScene = _overlayScene;
 
             sceneView.Scene = scene;
             sceneView.OverlayScene = _overlayScene;
