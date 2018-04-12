@@ -103,6 +103,9 @@ namespace aRCCar.Xamarin.Game
             {
                 _sceneManager.FixEntityAtCurrentPosition(SceneManager.EntityState.Ready);
                 _sceneManager.PlaceEntityField(SceneView.Scene);
+
+                _sceneManager.PlacePlacementNode(SceneView.Scene);
+
                 OverlayScene.FinishActionPlacement();
                 State = GameState.StartPositioning;
             }
@@ -128,7 +131,7 @@ namespace aRCCar.Xamarin.Game
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString());
                     //Debug.WriteLine("scenePoint2: " + scenePoint2.ToString());
                     //Debug.WriteLine("scenePoint1: " + scenePoint1.ToString() + ", scenePoint2: " + scenePoint2.ToString() + " - X: " + diff.X + ", Z: " + diff.Z + ", angle: " + (angle * 180 / Math.PI));
-                    _sceneManager.RotateEntityField(scenePoint1.Value, scenePoint2.Value);
+                    _sceneManager.RotateEntityFieldMarker(scenePoint1.Value, scenePoint2.Value);
                 }
             }
             if(State == GameState.StartCountDown)

@@ -19,14 +19,12 @@ namespace aRCCar.Xamarin.Game
         }
 
         CarEntity _entityNode = null;
-        SCNNode _fieldNode = null;
+        TrackNode _fieldNode = null;
+        PlacementNode _placementNode = null;
 
-        static float _fieldWidth = 0.1f;
-        static float _fieldLength = 0.4f;
-        static float _entityInitialPosOnField = 0.05f;
 
         //float _speed = 0.0f;
-        float _fieldToEntityOffset = _fieldLength / 2 - _entityInitialPosOnField;
+        //float _fieldToEntityOffset = _fieldLength / 2 - _entityInitialPosOnField;
         SCNVector3 _entityDirection = new SCNVector3(1, 0, 0);
 
         EntityState _entityState = EntityState.Preparing;
@@ -69,15 +67,17 @@ namespace aRCCar.Xamarin.Game
 
         public void PlaceEntityField(SCNScene scene)
         {
-            var field = new SCNPlane() { Width = _fieldWidth, Height = _fieldLength };
-
-            _fieldNode = new SCNNode();
-            _fieldNode.Geometry = field;
-            _fieldNode.Position = _entityNode.Position + (_entityDirection * _fieldToEntityOffset);
-            _fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Orange;
-            _fieldNode.EulerAngles = new SCNVector3(-1 * (float)Math.PI / 2, (float)Math.PI / 2, 0);
+            _fieldNode = new TrackNode();
+            _fieldNode.Position = _entityNode.Position + (_entityDirection * _fieldNode.EntityStartPositionOffet);
 
             scene.RootNode.AddChildNode(_fieldNode);
+        }
+
+        public void PlacePlacementNode(SCNScene scene){
+            _placementNode =  new PlacementNode();
+            _placementNode.Position = _entityNode.Position;
+
+            scene.RootNode.AddChildNode(_placementNode);
         }
 
         SCNVector3? entityPositionOnDoubleTouch;
@@ -99,7 +99,7 @@ namespace aRCCar.Xamarin.Game
             doubleTouchInitEulerAnglesY = (diff.X > 0) ? dirAngle : (2 * (float)Math.PI - dirAngle);
         }
 
-        public void RotateEntityField(SCNVector3 coord1, SCNVector3 coord2)
+        public void RotateEntityFieldMarker(SCNVector3 coord1, SCNVector3 coord2)
         {
             var doubleTouchNewPosition = (coord1 + coord2) / 2;
             var diff = coord2 - coord1;
@@ -118,21 +118,23 @@ namespace aRCCar.Xamarin.Game
             var entityAngle = _entityNode.EulerAngles.Y; // + (Math.PI / 2);
             _entityDirection = new SCNVector3((float)Math.Sin(entityAngle), 0, (float)Math.Cos(entityAngle));
 
-            _fieldNode.Position = _entityNode.Position + (_entityDirection * _fieldToEntityOffset);
+            _fieldNode.Position = _entityNode.Position + (_entityDirection * _fieldNode.EntityStartPositionOffet);
             _fieldNode.EulerAngles = entityFieldNewEulerAngles.Value;
 
+            _placementNode.Position = _entityNode.Position;
         }
 
         public void StartCountDown()
         {
-            _fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Red;
+            _placementNode.RemoveFromParentNode();
+            _fieldNode.ShowFullTrack(); //Geometry.Materials.First().Diffuse.Contents = UIColor.Red;
         }
 
         SCNVector3 _entityStartPosition;
         public void CanStartRun()
         {
             _entityStartPosition = _entityNode.Position;
-            _fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
+            //_fieldNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Green;
         }
 
         public void FalseStart()
@@ -152,7 +154,7 @@ namespace aRCCar.Xamarin.Game
                 return;
 
             _entityNode.Position = _entityNode.Position + (_entityDirection * d);
-            if ((_entityNode.Position - _entityStartPosition).Length > (_fieldLength - _entityInitialPosOnField))
+            if ((_entityNode.Position - _entityStartPosition).Length > (_fieldNode.Length - _fieldNode.EntityStartPositionOffet))
             {
                 _entityState = EntityState.Finished;
             }
