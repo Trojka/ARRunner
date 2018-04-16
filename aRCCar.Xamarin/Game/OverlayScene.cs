@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using CoreGraphics;
+using Foundation;
 using SpriteKit;
 using UIKit;
 
@@ -9,11 +11,17 @@ namespace aRCCar.Xamarin.Game
 {
     public class OverlayScene : SKScene
     {
+        const float CountDownLightRadius = 10;
+
         SKLabelNode _scanText1;
         SKLabelNode _scanText2;
         SKSpriteNode _phone;
 
         SKSpriteNode _check;
+
+        List<SKShapeNode> _lights = new List<SKShapeNode>();
+
+        GamePad _gamePad;
 
         SKSpriteNode _pistonLeft;
         SKSpriteNode _pistonRight;
@@ -22,10 +30,20 @@ namespace aRCCar.Xamarin.Game
         {
             Debug.WriteLine("OverlayScene: " + base.Size.ToString());
 
+            _gamePad = new GamePad(this);
+            _gamePad.SingleFingerTouchEvent+= _gamePad_SingleFingerTouchEvent;
+            _gamePad.IllegalTouchEvent+= _gamePad_IllegalTouchEvent;
+
             BackgroundColor = UIColor.Clear;
             var size = base.Size;
+        }
 
+        void _gamePad_SingleFingerTouchEvent(object sender, Util.EventArgs<SingleFingerTouch> e)
+        {
+        }
 
+        void _gamePad_IllegalTouchEvent(object sender, Util.EventArgs<IllegalTouch> e)
+        {
         }
 
         public void ShowScanAction()
@@ -114,6 +132,60 @@ namespace aRCCar.Xamarin.Game
             }
         }
 
+        public void StartCountDown()
+        {
+            var size = base.Size;
+
+            var lightSpacing = (CountDownLightRadius + 15);
+
+            _lights.Add(CreateLightAtPosition(new CGPoint(size.Width / 2 + 2 * lightSpacing, size.Height - (CountDownLightRadius + 25))));
+            _lights.Add(CreateLightAtPosition(new CGPoint(size.Width / 2 + 1 * lightSpacing, size.Height - (CountDownLightRadius + 25))));
+            _lights.Add(CreateLightAtPosition(new CGPoint(size.Width / 2 - 0 * lightSpacing, size.Height - (CountDownLightRadius + 25))));
+            _lights.Add(CreateLightAtPosition(new CGPoint(size.Width / 2 - 1 * lightSpacing, size.Height - (CountDownLightRadius + 25))));
+            _lights.Add(CreateLightAtPosition(new CGPoint(size.Width / 2 - 2 * lightSpacing, size.Height - (CountDownLightRadius + 25))));
+
+            foreach(var light in _lights)
+            {
+                AddChild(light);
+            }
+        }
+
+        public void EndCountDown()
+        {
+            foreach (var light in _lights)
+            {
+                light.RemoveFromParent();
+            }
+
+            _lights.Clear();
+        }
+
+        private SKShapeNode CreateLightAtPosition(CGPoint position)
+        {
+            var circle = SKShapeNode.FromCircle(CountDownLightRadius);
+            circle.Position = position;
+            circle.StrokeColor = UIColor.DarkGray;
+            circle.LineWidth = 3;
+            circle.FillColor = UIColor.Red;
+
+            return circle;
+
+        }
+
+        public void ShowCountDown(int count)
+        {
+            int i = 0;
+            foreach (var light in _lights)
+            {
+                if(i >= count)
+                    light.FillColor = UIColor.Green;
+                else
+                    light.FillColor = UIColor.Red;
+
+                i++;
+            }
+        }
+
         public void ShowActionControls()
         {
             var size = base.Size;
@@ -128,5 +200,25 @@ namespace aRCCar.Xamarin.Game
 
             AddChild(_pistonRight);
         }
-    }
+
+		public override void TouchesBegan(NSSet touches, UIEvent evt)
+		{
+            _gamePad.TouchesBegan(touches, evt);
+		}
+
+		public override void TouchesMoved(NSSet touches, UIEvent evt)
+		{
+            _gamePad.TouchesMoved(touches, evt);
+		}
+
+		public override void TouchesEnded(NSSet touches, UIEvent evt)
+		{
+            _gamePad.TouchesEnded(touches, evt);
+        }
+
+		public override void TouchesCancelled(NSSet touches, UIEvent evt)
+		{
+
+        }
+	}
 }

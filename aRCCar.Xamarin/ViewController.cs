@@ -96,14 +96,14 @@ namespace aRCCar.Xamarin
         void LeftClicked(NSObject sender)
         {
             Debug.WriteLine("Left clicked");
-            gamePlay.LeftFoot();
+            gamePlay.LeftActuator();
         }
 
         [Action("rightclicked:")]
         void RightClicked(NSObject sender)
         {
             Debug.WriteLine("Right clicked");
-            gamePlay.RightFoot();
+            gamePlay.RightActuator();
         }
     }
 }

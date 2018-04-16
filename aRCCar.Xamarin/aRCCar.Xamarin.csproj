@@ -130,6 +130,8 @@
     <Compile Include="Game\OverlayScene.cs" />
     <Compile Include="Game\PlacementNode.cs" />
     <Compile Include="Game\TrackNode.cs" />
+    <Compile Include="Game\GamePad.cs" />
+    <Compile Include="Game\IllegalTouch.cs" />
   </ItemGroup>
   <ItemGroup>
     <SceneKitAsset Include="Models.scnassets\sharedImages\environment.jpg" />

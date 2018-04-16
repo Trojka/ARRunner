@@ -24,8 +24,10 @@ namespace aRCCar.Xamarin.Game
             GameOver
         }
 
-        TimeSpan CountDown = new TimeSpan(0, 0, 5);
+        int CountDown = 5;
         DateTime _timeToStart = DateTime.MaxValue;
+        int _countDownTime = int.MaxValue;
+        int EndCountDownAt = 3;
 
         SceneManager _sceneManager = new SceneManager();
         EntityPhysics _physics = new EntityPhysics();
@@ -77,10 +79,10 @@ namespace aRCCar.Xamarin.Game
                 var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, SceneView, null);
 
 
-                Debug.WriteLine("GameState.Scanning > worldPos.hitType=" + worldPos.hitType.ToString());
+                //Debug.WriteLine("GameState.Scanning > worldPos.hitType=" + worldPos.hitType.ToString());
                 if(worldPos.hitType == PlaneFinding.HitType.Plane && !OverlayScene.ScanActionFinished)
                 {
-                    Debug.WriteLine("GameState.Scanning > FinishScanAction");
+                    //Debug.WriteLine("GameState.Scanning > FinishScanAction");
                     OverlayScene.FinishScanAction();
                     OverlayScene.ShowActionPlacement();
                 }
@@ -88,7 +90,7 @@ namespace aRCCar.Xamarin.Game
                 {
                     if(!OverlayScene.ScanActionShowing)
                     {
-                        Debug.WriteLine("GameState.Scanning > ShowScanAction");
+                        //Debug.WriteLine("GameState.Scanning > ShowScanAction");
                         OverlayScene.FinishActionPlacement();
                         OverlayScene.ShowScanAction();
                     }
@@ -137,21 +139,45 @@ namespace aRCCar.Xamarin.Game
             if(State == GameState.StartCountDown)
             {
                 _timeToStart = DateTime.Now;
+                _countDownTime = 1;
                 _sceneManager.StartCountDown();
+                OverlayScene.UserInteractionEnabled = true;
+                OverlayScene.StartCountDown();
                 OverlayScene.ShowActionControls();
 
                 State = GameState.CountDown;
             }
             if(State == GameState.CountDown)
             {
-                if((DateTime.Now - _timeToStart) > CountDown)
+                var elapsedTime = (DateTime.Now - _timeToStart).TotalSeconds;
+                //if (elapsedTime >= 1 && elapsedTime < 2)
+                //    OverlayScene.ShowCountDown(4);
+                //if (elapsedTime >= 2 && elapsedTime < 3)
+                //    OverlayScene.ShowCountDown(3);
+                //if (elapsedTime >= 3 && elapsedTime < 4)
+                //    OverlayScene.ShowCountDown(2);
+                //if (elapsedTime >= 4 && elapsedTime < 5)
+                    //OverlayScene.ShowCountDown(1);
+
+                if(elapsedTime >= _countDownTime && elapsedTime < _countDownTime+1)
                 {
+                    OverlayScene.ShowCountDown(CountDown - _countDownTime);
+                    _countDownTime++;
+                }
+                
+                if((DateTime.Now - _timeToStart).TotalSeconds >= CountDown)
+                {
+                    OverlayScene.ShowCountDown(0);
                     _sceneManager.CanStartRun();
                     State = GameState.Start;
                 }
             }
             if(State == GameState.Start)
             {
+                var elapsedTime = (DateTime.Now - _timeToStart).TotalSeconds;
+                if (elapsedTime > CountDown + EndCountDownAt)
+                    OverlayScene.EndCountDown();
+
                 var d = (float)_physics.DistanceTravelled(DateTime.Now);
                 _sceneManager.MoveDistance(d);
             }
@@ -198,14 +224,14 @@ namespace aRCCar.Xamarin.Game
 
         }
 
-        enum Foot
+        enum Actuator
         {
             Left,
             Right
         }
 
-        Foot _lastFoot = Foot.Left;
-        public void LeftFoot()
+        Actuator _lastFoot = Actuator.Left;
+        public void LeftActuator()
         {
             if(State == GameState.CountDown)
             {
@@ -215,7 +241,7 @@ namespace aRCCar.Xamarin.Game
 
             if(State == GameState.Start)
             {
-                if (_lastFoot == Foot.Left)
+                if (_lastFoot == Actuator.Left)
                 {
                     _sceneManager.Stumble();
                     _physics.Stumble();
@@ -225,11 +251,11 @@ namespace aRCCar.Xamarin.Game
                     _physics.ApplyForce();
                 }
 
-                _lastFoot = Foot.Left;
+                _lastFoot = Actuator.Left;
             }
         }
 
-        public void RightFoot()
+        public void RightActuator()
         {
             if (State == GameState.CountDown)
             {
@@ -239,7 +265,7 @@ namespace aRCCar.Xamarin.Game
 
             if (State == GameState.Start)
             {
-                if (_lastFoot == Foot.Right)
+                if (_lastFoot == Actuator.Right)
                 {
                     _sceneManager.Stumble();
                     _physics.Stumble();
@@ -249,7 +275,7 @@ namespace aRCCar.Xamarin.Game
                     _physics.ApplyForce();
                 }
 
-                _lastFoot = Foot.Right;
+                _lastFoot = Actuator.Right;
             }
         }
     }
