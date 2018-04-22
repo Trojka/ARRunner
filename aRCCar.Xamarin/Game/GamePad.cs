@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using aRCCar.Xamarin.Util;
 using Foundation;
@@ -22,9 +23,11 @@ namespace aRCCar.Xamarin.Game
 
         public void TouchesBegan(NSSet touches, UIEvent evt)
         {
+            Debug.WriteLine("GamePad.TouchesBegan: count" + touches.Count);
             if(touches.Count == 1 && _currentNumberOfTouches == 0)
             {
-                var touch = (UITouch)touches.ElementAt(0);
+                Debug.WriteLine("GamePad.TouchesBegan: touches.Count == 1 && _currentNumberOfTouches == 0");
+               var touch = (UITouch)touches.ElementAt(0);
                 var viewTouchPoint = touch.LocationInNode(_scene);
 
                 if (SingleFingerTouchEvent != null)
@@ -35,6 +38,7 @@ namespace aRCCar.Xamarin.Game
             }
             else if(touches.Count >= 1 && _currentNumberOfTouches == 1)
             {
+                Debug.WriteLine("GamePad.TouchesBegan: touches.Count >= 1 && _currentNumberOfTouches == 1");
                 var touch = (UITouch)touches.ElementAt(0);
                 var viewTouchPoint = touch.LocationInNode(_scene);
                 if (SingleFingerTouchEvent != null)
@@ -50,6 +54,7 @@ namespace aRCCar.Xamarin.Game
             }
             else
             {
+                Debug.WriteLine("GamePad.TouchesBegan: else");
                 if (IllegalTouchEvent != null)
                 {
                     var touchData = new IllegalTouch(GestureState.Start);
@@ -57,6 +62,7 @@ namespace aRCCar.Xamarin.Game
                 }
             }
             _currentNumberOfTouches = _currentNumberOfTouches + touches.Count;
+            Debug.WriteLine("GamePad.TouchesBegan: _currentNumberOfTouches=" + _currentNumberOfTouches);
         }
 
         public void TouchesMoved(NSSet touches, UIEvent evt)
@@ -65,8 +71,10 @@ namespace aRCCar.Xamarin.Game
 
         public void TouchesEnded(NSSet touches, UIEvent evt)
         {
+            Debug.WriteLine("GamePad.TouchesEnded: " + touches.Count);
             if(touches.Count == 1 && _currentNumberOfTouches == 1)
             {
+                Debug.WriteLine("GamePad.TouchesEnded: touches.Count == 1 && _currentNumberOfTouches == 1");
                 var touch = (UITouch)touches.ElementAt(0);
                 var viewTouchPoint = touch.LocationInNode(_scene);
                 if (SingleFingerTouchEvent != null)
@@ -77,6 +85,7 @@ namespace aRCCar.Xamarin.Game
             }
             else if(touches.Count == _currentNumberOfTouches)
             {
+                Debug.WriteLine("GamePad.TouchesEnded: touches.Count == _currentNumberOfTouches");
                 if (IllegalTouchEvent != null)
                 {
                     var touchData = new IllegalTouch(GestureState.End);
@@ -84,6 +93,7 @@ namespace aRCCar.Xamarin.Game
                 }
             }
             _currentNumberOfTouches = _currentNumberOfTouches - touches.Count;
+            Debug.WriteLine("GamePad.TouchesBegan: _currentNumberOfTouches=" + _currentNumberOfTouches);
         }
     }
 }

@@ -26,9 +26,13 @@ namespace aRCCar.Xamarin.Game
         SKSpriteNode _pistonLeft;
         SKSpriteNode _pistonRight;
 
+        public event EventHandler LeftActuatorClicked;
+        public event EventHandler RightActuatorClicked;
+        public event EventHandler IllegalClick;
+
         public OverlayScene(CGSize sceneSize) : base(sceneSize)
         {
-            Debug.WriteLine("OverlayScene: " + base.Size.ToString());
+            //Debug.WriteLine("OverlayScene: " + base.Size.ToString());
 
             _gamePad = new GamePad(this);
             _gamePad.SingleFingerTouchEvent+= _gamePad_SingleFingerTouchEvent;
@@ -40,10 +44,32 @@ namespace aRCCar.Xamarin.Game
 
         void _gamePad_SingleFingerTouchEvent(object sender, Util.EventArgs<SingleFingerTouch> e)
         {
+            if(_pistonLeft != null)
+            {
+                var bounds = _pistonLeft.CalculateAccumulatedFrame();
+                if(bounds.Contains(e.Value.Coord))
+                {
+                    Debug.WriteLine("OverlayScene: inside pistonLeft");
+                    if (LeftActuatorClicked != null)
+                        LeftActuatorClicked(this, EventArgs.Empty);
+                }
+            }
+            if (_pistonRight != null)
+            {
+                var bounds = _pistonRight.CalculateAccumulatedFrame();
+                if (bounds.Contains(e.Value.Coord))
+                {
+                    Debug.WriteLine("OverlayScene: inside pistonRight");
+                    if (RightActuatorClicked != null)
+                        RightActuatorClicked(this, EventArgs.Empty);
+                }
+            }
         }
 
         void _gamePad_IllegalTouchEvent(object sender, Util.EventArgs<IllegalTouch> e)
         {
+            if (IllegalClick != null)
+                IllegalClick(this, EventArgs.Empty);
         }
 
         public void ShowScanAction()

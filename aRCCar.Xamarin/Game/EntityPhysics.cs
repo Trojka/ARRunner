@@ -71,7 +71,7 @@ namespace aRCCar.Xamarin.Game
             _currentTime = t;
             _currentSpeed = _currentSpeed + a * dt;
 
-            Debug.Print("MoveDistance: a=" + a + ", d=" + d + ", _currentForce=" + _currentForce + ", dragForce=" + dragForce);
+            //Debug.Print("MoveDistance: a=" + a + ", d=" + d + ", _currentForce=" + _currentForce + ", dragForce=" + dragForce);
 
             return d;
         }
