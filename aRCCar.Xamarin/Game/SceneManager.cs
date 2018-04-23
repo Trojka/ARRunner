@@ -142,7 +142,7 @@ namespace aRCCar.Xamarin.Game
             //_entityNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Red;
         }
 
-        public void Stumble()
+        public void InvalidActivity()
         {
             //_entityNode.Geometry.Materials.First().Diffuse.Contents = UIColor.Orange;
         }

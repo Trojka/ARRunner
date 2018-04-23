@@ -11,12 +11,14 @@ namespace aRCCar.Xamarin.Game
         const float RING_THICKNESS = 0.01f;
         const float RING_HEIGHT = 0.001f;
 
+        readonly UIColor RING_COLOR = UIColor.LightGray;
+
         public PlacementNode()
         {
             var geometry = new SCNTube() { InnerRadius = INNER_RADIUS, OuterRadius = INNER_RADIUS + RING_THICKNESS, Height = RING_HEIGHT };
 
             this.Geometry = geometry;
-            this.Geometry.Materials.First().Diffuse.Contents = UIColor.LightGray;
+            this.Geometry.Materials.First().Diffuse.Contents = RING_COLOR;
         }
     }
 }

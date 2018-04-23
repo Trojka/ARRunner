@@ -15,11 +15,11 @@ namespace aRCCar.Xamarin.Game
         TimeSpan _stumbleDuration = new TimeSpan(0, 0, 0, 0, 500);
         DateTime _stumbleTimeStamp = DateTime.MaxValue;
 
-        public double BodyMassInKg
+        public double BodyMass
         {
             get;
             set;
-        } = 50;
+        } = 25;
 
         public double ApplyForceInNewton
         {
@@ -31,7 +31,7 @@ namespace aRCCar.Xamarin.Game
             _forceApplied = false;
         }
 
-        public void Stumble()
+        public void InvalidActivity()
         {
             _stumbleTimeStamp = DateTime.Now;
         }
@@ -43,7 +43,6 @@ namespace aRCCar.Xamarin.Game
             }
 
             //http://www.softschools.com/formulas/physics/air_resistance_formula/85/
-
             // The dragforce is
             // F = ((density * dragCoeff * Area) / 2) * speed^2
             double dragCoeff = 2000;
@@ -58,14 +57,13 @@ namespace aRCCar.Xamarin.Game
             }
 
             //https://www.quora.com/How-do-you-find-distance-when-time-and-acceleration-are-given
-
             var elapsedTime = t - _currentTime.Value;
             double dt = elapsedTime.TotalSeconds;
 
             // Then the acceleration is force divided by mass:
-            double a = _currentForce / BodyMassInKg;
+            double a = _currentForce / BodyMass;
 
-            // The distance travelled is (we're not going to run backwards, so minimum is zero):
+            // The distance travelled is (we're not going to move backwards, so minimum is zero):
             double d = Math.Max(0, (_currentSpeed * dt) + (a * Math.Pow(dt, 2) / 2));
 
             _currentTime = t;

@@ -16,8 +16,7 @@ namespace aRCCar.Xamarin.Game
         static float _entityInitialPosOnField = 0.05f;
 
         readonly UIColor TRACK_COLOR = UIColor.Orange;
-
-        readonly UIColor TRANSPARENTTRACK_COLOR = UIColor.Blue;
+        readonly UIColor TRANSPARENTTRACK_COLOR = UIColor.LightGray;
 
         SCNNode _trackNode;
 

@@ -31,6 +31,7 @@ namespace aRCCar.Xamarin.Game
 
         SceneManager _sceneManager = new SceneManager();
         EntityPhysics _physics = new EntityPhysics();
+        OverlayScene _overlayScene;
 
         static private ARFrame currentFrame;
 
@@ -54,7 +55,31 @@ namespace aRCCar.Xamarin.Game
 
         public ARKit.ARSCNView SceneView { get; set; }
 
-        public OverlayScene OverlayScene { get; set; }
+        public OverlayScene OverlayScene 
+        { 
+            get { return _overlayScene; }
+            set {
+                _overlayScene = value;
+                _overlayScene.LeftActuatorClicked += _overlayScene_LeftActuatorClicked;
+                _overlayScene.RightActuatorClicked += _overlayScene_RightActuatorClicked;
+                _overlayScene.IllegalClick += _overlayScene_IllegalClick;
+            } 
+        }
+
+        void _overlayScene_LeftActuatorClicked(object sender, EventArgs e)
+        {
+            LeftActuator();
+        }
+
+        void _overlayScene_RightActuatorClicked(object sender, EventArgs e)
+        {
+            RightActuator();
+        }
+
+        void _overlayScene_IllegalClick(object sender, EventArgs e)
+        {
+            InvalidActivity();
+        }
 
         public void Update()
         {
@@ -69,7 +94,7 @@ namespace aRCCar.Xamarin.Game
                 {
                     return;
                 }
-                // Vital for memory: Single location to set current frame! (Note: Assignment disposes existing frame -- see `set`
+
                 ARGamePlay.CurrentFrame = Session.CurrentFrame;
 
 
@@ -144,21 +169,13 @@ namespace aRCCar.Xamarin.Game
                 OverlayScene.UserInteractionEnabled = true;
                 OverlayScene.StartCountDown();
                 OverlayScene.ShowActionControls();
+                OverlayScene.LeftActuatorEligibleForPresses();
 
                 State = GameState.CountDown;
             }
             if(State == GameState.CountDown)
             {
                 var elapsedTime = (DateTime.Now - _timeToStart).TotalSeconds;
-                //if (elapsedTime >= 1 && elapsedTime < 2)
-                //    OverlayScene.ShowCountDown(4);
-                //if (elapsedTime >= 2 && elapsedTime < 3)
-                //    OverlayScene.ShowCountDown(3);
-                //if (elapsedTime >= 3 && elapsedTime < 4)
-                //    OverlayScene.ShowCountDown(2);
-                //if (elapsedTime >= 4 && elapsedTime < 5)
-                    //OverlayScene.ShowCountDown(1);
-
                 if(elapsedTime >= _countDownTime && elapsedTime < _countDownTime+1)
                 {
                     OverlayScene.ShowCountDown(CountDown - _countDownTime);
@@ -243,8 +260,7 @@ namespace aRCCar.Xamarin.Game
             {
                 if (_lastFoot == Actuator.Left)
                 {
-                    _sceneManager.Stumble();
-                    _physics.Stumble();
+                    InvalidActivity();
                 }
                 else
                 {
@@ -252,6 +268,7 @@ namespace aRCCar.Xamarin.Game
                 }
 
                 _lastFoot = Actuator.Left;
+                OverlayScene.RightActuatorEligibleForPresses();
             }
         }
 
@@ -267,8 +284,7 @@ namespace aRCCar.Xamarin.Game
             {
                 if (_lastFoot == Actuator.Right)
                 {
-                    _sceneManager.Stumble();
-                    _physics.Stumble();
+                    InvalidActivity();
                 }
                 else
                 {
@@ -276,7 +292,14 @@ namespace aRCCar.Xamarin.Game
                 }
 
                 _lastFoot = Actuator.Right;
+                OverlayScene.LeftActuatorEligibleForPresses();
             }
+        }
+
+        public void InvalidActivity()
+        {
+            _sceneManager.Stumble();
+            _physics.Stumble();
         }
     }
 }

@@ -23,8 +23,11 @@ namespace aRCCar.Xamarin.Game
 
         GamePad _gamePad;
 
-        SKSpriteNode _pistonLeft;
-        SKSpriteNode _pistonRight;
+        SKSpriteNode _actuatorLeft;
+        SKSpriteNode _actuatorRight;
+        const int ActuatorCenterOffset = 45;
+        const int ActuatorEdgeOffset = 150;
+        const int ActuatorEligibleOffset = 10;
 
         public event EventHandler LeftActuatorClicked;
         public event EventHandler RightActuatorClicked;
@@ -44,9 +47,9 @@ namespace aRCCar.Xamarin.Game
 
         void _gamePad_SingleFingerTouchEvent(object sender, Util.EventArgs<SingleFingerTouch> e)
         {
-            if(_pistonLeft != null)
+            if(_actuatorLeft != null)
             {
-                var bounds = _pistonLeft.CalculateAccumulatedFrame();
+                var bounds = _actuatorLeft.CalculateAccumulatedFrame();
                 if(bounds.Contains(e.Value.Coord))
                 {
                     Debug.WriteLine("OverlayScene: inside pistonLeft");
@@ -54,9 +57,9 @@ namespace aRCCar.Xamarin.Game
                         LeftActuatorClicked(this, EventArgs.Empty);
                 }
             }
-            if (_pistonRight != null)
+            if (_actuatorRight != null)
             {
-                var bounds = _pistonRight.CalculateAccumulatedFrame();
+                var bounds = _actuatorRight.CalculateAccumulatedFrame();
                 if (bounds.Contains(e.Value.Coord))
                 {
                     Debug.WriteLine("OverlayScene: inside pistonRight");
@@ -216,15 +219,29 @@ namespace aRCCar.Xamarin.Game
         {
             var size = base.Size;
 
-            _pistonLeft = SKSpriteNode.FromImageNamed("piston_scaled");
-            _pistonLeft.Position = new CGPoint(size.Width / 2 - 45, 150);
+            _actuatorLeft = SKSpriteNode.FromImageNamed("piston_scaled");
+            _actuatorLeft.Position = new CGPoint(size.Width / 2 - ActuatorCenterOffset, ActuatorEdgeOffset);
 
-            AddChild(_pistonLeft);
+            AddChild(_actuatorLeft);
 
-            _pistonRight = SKSpriteNode.FromImageNamed("piston_scaled");
-            _pistonRight.Position = new CGPoint(size.Width / 2 + 45, 150);
+            _actuatorRight = SKSpriteNode.FromImageNamed("piston_scaled");
+            _actuatorRight.Position = new CGPoint(size.Width / 2 + ActuatorCenterOffset, ActuatorEdgeOffset);
 
-            AddChild(_pistonRight);
+            AddChild(_actuatorRight);
+        }
+
+        public void LeftActuatorEligibleForPresses()
+        {
+            var size = base.Size;
+            _actuatorLeft.Position = new CGPoint(size.Width / 2 - ActuatorCenterOffset, ActuatorEdgeOffset + ActuatorEligibleOffset);
+            _actuatorRight.Position = new CGPoint(size.Width / 2 + ActuatorCenterOffset, ActuatorEdgeOffset - ActuatorEligibleOffset);
+        }
+
+        public void RightActuatorEligibleForPresses()
+        {
+            var size = base.Size;
+            _actuatorLeft.Position = new CGPoint(size.Width / 2 - ActuatorCenterOffset, ActuatorEdgeOffset - ActuatorEligibleOffset);
+            _actuatorRight.Position = new CGPoint(size.Width / 2 + ActuatorCenterOffset, ActuatorEdgeOffset + ActuatorEligibleOffset);
         }
 
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
