@@ -298,8 +298,8 @@ namespace aRCCar.Xamarin.Game
 
         public void InvalidActivity()
         {
-            _sceneManager.Stumble();
-            _physics.Stumble();
+            _sceneManager.InvalidActivity();
+            _physics.InvalidActivity();
         }
     }
 }
