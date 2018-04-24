@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aRCCar.Xamarin", "aRCCar.Xamarin\aRCCar.Xamarin.csproj", "{AD4C452F-0304-43A3-96CF-2DCC4E1E544A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARRunner.Xamarin", "ARRunner.Xamarin\ARRunner.Xamarin.csproj", "{AD4C452F-0304-43A3-96CF-2DCC4E1E544A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
