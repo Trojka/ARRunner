@@ -6,7 +6,7 @@ using UIKit;
 
 namespace aRCCar.Xamarin.Game
 {
-    public class CarEntity : SCNReferenceNode
+    public class MovingEntity : SCNReferenceNode
     {
         SCNMaterial _greyMaterial = null;
         SCNMaterial _colorMaterial = null;
@@ -22,7 +22,7 @@ namespace aRCCar.Xamarin.Game
 
         private bool _isEnabled;
 
-        public CarEntity()
+        public MovingEntity()
             :base (NSUrl.FromString(
                 NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/rc_car.dae"))
         {

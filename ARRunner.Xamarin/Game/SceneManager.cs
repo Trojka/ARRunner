@@ -18,7 +18,7 @@ namespace aRCCar.Xamarin.Game
             Finished
         }
 
-        CarEntity _entityNode = null;
+        MovingEntity _entityNode = null;
         TrackNode _fieldNode = null;
         PlacementNode _placementNode = null;
 
@@ -39,7 +39,7 @@ namespace aRCCar.Xamarin.Game
             if (_entityNode == null)
             {
 
-                var car = new CarEntity();
+                var car = new MovingEntity();
                 car.Load();
 
                 car.Position = position;

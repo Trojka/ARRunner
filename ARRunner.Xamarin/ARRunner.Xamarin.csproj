@@ -126,7 +126,7 @@
     <Compile Include="SpatialMapping\Plane.cs" />
     <Compile Include="SpatialMapping\PlaneFinding.cs" />
     <Compile Include="SpatialMapping\Ray.cs" />
-    <Compile Include="Game\CarEntity.cs" />
+    <Compile Include="Game\MovingEntity.cs" />
     <Compile Include="Game\OverlayScene.cs" />
     <Compile Include="Game\PlacementNode.cs" />
     <Compile Include="Game\TrackNode.cs" />
