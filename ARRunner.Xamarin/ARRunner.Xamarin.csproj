@@ -146,6 +146,7 @@
     <SceneKitAsset Include="Models.scnassets\rc_car_grey_texture.png" />
     <SceneKitAsset Include="Models.scnassets\Exhaust.scnp" />
     <SceneKitAsset Include="Models.scnassets\spark.png" />
+    <SceneKitAsset Include="Models.scnassets\runner_verylowpoly.dae" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ExhaustReactor.scnp" />
