@@ -1,0 +1,43 @@
+Introduction
+************
+
+There is a lot of interest in AR (Augmented Reality) lately, partially due to Apple incorporating AR capabilities natively in the iOS operating system through the ARKit libraries. Shortly after Apple introduced ARKit, Google introduced ARCode which does basically the same thing.
+
+So, what is that “same thing”? Well, they allow you to watch the world through your smartphone camera and place 3D content which interacts with the world shown. The video of the WWDC keynote, available here (https://developer.apple.com/videos/play/wwdc2017/602/ ), where the technology got introduced, shows a very nice example of what is possible.
+
+This article will introduce the basic steps necessary to create such an application, a small game, using ARKit and Xamarin.
+
+Basics
+******
+
+ARKit uses a combination of the video from the camera and the phones motion sensors to identify the position of the phone in the world space. This technique is known as visual-inertial odometry.
+
+Basically, through image processing techniques, ARKit finds features in the scene and tracks those features in the video feed. It then uses the motion sensors of the phone to correct this tracking. By tracking the features, ARKit is capable of forming itself an image of what the 3D world around it looks like. And using this information it can find surfaces in the 3D world.
+
+It then exposes these surfaces through the ARKit API allowing developers to place content in the 3D world viewed through the camera.
+
+To place something on this surface, you find the intersection of the "ray of view", coming out of the phones camera, and this plane.
+
+Prepare:
+*******
+---
+-- opzetten van een scene om de 3D content te kunnen tonen op een correcte manier in de 3D wereld.
+
+Standard 3D scenes on the iOS platform are mostly created using the SCNView class.
+This view is part of the Apple SceneKit library which provides an API to manipulate and render 3D assets.
+
+However, with Augmented Reality, there is an additoinal challenge: you want to place the 3D assets with reference to the 3D world viewed in/through your camera.
+To be able to display content in the camera view, Apple provides the ARSCNView class.
+
+It takes care of the mapping of coordinates from the 3D world to positions on the 2D screen.
+
+
+Step 1: finding planes
+**********************
+
+What are the concepts?
+----------------------
+
+ARSession
+ARWorldTrackingConfiguration
+Anchors
