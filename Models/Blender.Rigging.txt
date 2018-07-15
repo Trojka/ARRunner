@@ -1,0 +1,38 @@
+		
+Set your character at the center (that is, coord (0, 0, 0)
+
+Basic commands for working with selection
+=========================================
+Setting the cursor at the origin
+	> 	https://blender.stackexchange.com/questions/53886/move-3d-cursor-back-to-center-hotkey
+		Shift + C
+
+Selecting by dragging bounding box
+	>	B + LMB + dragging
+	
+Basic commands for working with bones
+=====================================		
+Start new bone creation
+	>	Shift + a
+	
+Chain new bone creation
+	>	in Edit mode: press E	
+	
+Connecting bones (establishing a parent-chile relation
+	>	select child bones first and parent last
+		press ctrl + p
+
+See bones through the model: 
+	>	set armature in X-Ray mode
+
+Mirroring the bones
+	https://blender.stackexchange.com/questions/76584/how-to-align-or-mirror-half-armature
+	>	use X axis mirror
+			(ben niet zeker dat dit mogelijk is om losse bones toe te voegen? wel mogelijk voor extend)
+	>	use Armature menu / Symmetrize
+			you'll need to name your bones with a letter L or R prefix/suffix
+			the symmetrize command will automatically name the mirrored bones with the other letter (R/L resp.)
+	>	use duplication
+			duplicate the bones
+			scale along x with scale -1
+			move into desired position
