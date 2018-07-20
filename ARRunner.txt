@@ -26,18 +26,133 @@ Prepare:
 Standard 3D scenes on the iOS platform are mostly created using the SCNView class.
 This view is part of the Apple SceneKit library which provides an API to manipulate and render 3D assets.
 
-However, with Augmented Reality, there is an additoinal challenge: you want to place the 3D assets with reference to the 3D world viewed in/through your camera.
-To be able to display content in the camera view, Apple provides the ARSCNView class.
+However, with Augmented Reality, there is an additional challenge: you want to place the 3D assets with reference to the 3D world viewed in/through your camera.
 
-It takes care of the mapping of coordinates from the 3D world to positions on the 2D screen.
+To be able to display content in the camera view, Apple provides the ARSCNView class. It takes care of the mapping of coordinates from the 3D world to positions on the 2D screen. The ARSCNView uses an ARSession objects to calculate this ampping. The ARSession class can be seen as the very heart of the AR experience. This function of this class is to integrate the various sensor readings (camera and motion) and to calculate a correspondence between the actual physical world and the virtual space the application uses.
 
+You can have different types of AR experiences. You choose a certain type of experience through the type of ARConfiguration you provide to the ARSession. The type we'll use here is implemented through the ARWorldTrackingConfiguration class: it provides a 6DOF (degrees of freedom) experience viewed through the back camera.
+
+//////
+MIJN VRAAG: wat is dan het verschil tussen ARSession en ARWorldTrackingConfiguration?
+//////
 
 Step 1: finding planes
 **********************
 
 What are the concepts?
 ----------------------
+It takes ARKit some time to find a plane in the cloud of 3D featurepoints.
+But it also takes some time to build this cloud: first, good featurepoints need to be found in the camera feed, and then they must be tracked from frame to frame.
+Eventually, ARKit analysis these found featurepoints to extract a horizontal or vertical plane.
 
-ARSession
-ARWorldTrackingConfiguration
-Anchors
+So, we take a two step approach to finding a good location to place out content and to provide feedback to the user about the process:
+1/ First, from the moment there are featurepoints available, we find the featurepoint closest to our viewing vector, and return this feauturepoint. This allows us to inform the user that featurepoints where found, but no plane could be extracted from them already.
+2/ Second, from the moment we find intersections of our view vector with planes found by ARKit, we return this intersection. Now the user can point his device on a spot in that plane to place the AR content.
+
+How is it done in code?
+-----------------------
+The two step process is implemented in the folowing method of the PlaneFinding class:
+
+        public static (SCNVector3? hitPoint, HitType hitType) FindNearestWorldPointToScreenPoint(CGPoint point, ARSCNView sceneView, SCNVector3? pointOnPlane)
+        {
+            var planeHitPosition = HitTestExistingPlanes(point, sceneView);
+            if (planeHitPosition.HasValue)
+                return (planeHitPosition, HitType.Plane);
+
+            var pointCloudHitPosition = HitTestPointCloud(point, sceneView, 18, 0.2, 2.0);
+            if (pointCloudHitPosition.HasValue)
+                return (pointCloudHitPosition, HitType.FeaturePoint);
+
+            return (null, HitType.None);
+        }
+
+Notice how we first check for intersections with planes by calling HitTestExistingPlanes and if that doesn't return any results, we continue searching the pointcloud.
+		
+Finding intersections with planes is done through the ARSCNView class. ARKit provides a method which does al the necesary calculations for us. We just need to provide the 2D coordinate in the view and the type of hittest result we want. We choose the ExistingPlaneUsingExtent type: it uses the smallest rectangular area including the ARKit detected plane. You can find other options and a more precise definition <a href="https://developer.apple.com/documentation/arkit/arhittestresult/resulttype">here</a>
+
+The point in the view we use here is the center of the screen.
+In the Update method of the ARGamePlay class we have:
+
+	var screenRect = SceneView.Bounds;
+	var screenCenter = new CGPoint(screenRect.GetMidX(), screenRect.GetMidY());
+
+    var worldPos = PlaneFinding.FindNearestWorldPointToScreenPoint(screenCenter, SceneView, null);
+
+In the 	FindNearestWorldPointToScreenPoint method we first look for intersections with planes found by ARKit, as discussed above:
+
+	private static SCNVector3? HitTestExistingPlanes(CGPoint point, ARSCNView sceneView)
+	{
+		var hitResult = sceneView.HitTest(point, ARHitTestResultType.ExistingPlaneUsingExtent);
+		if (hitResult.Count() > 0)
+		{
+			var xPos = hitResult[0].WorldTransform.Column3.X;
+			var yPos = hitResult[0].WorldTransform.Column3.Y;
+			var zPos = hitResult[0].WorldTransform.Column3.Z;
+
+			return new SCNVector3(xPos, yPos, zPos);
+		}
+
+		return null;        
+	}
+
+If none are found, we search for intersections with the feature point-cloud:
+*** VOLGENDE NOG VERDER UIT TE WERKEN, IS NU GEWOON COPY/PASTE VAN DE CODE !!!!!
+
+        private static SCNVector3? HitTestPointCloud(CGPoint point, ARSCNView sceneView, double coneOpeningAngleInDegrees, double minDistance = 0, double maxDistance = Double.MaxValue)
+        {
+            //var results = new List<FeatureHitTestResult>();
+            var minHitTestResultDistance = float.MaxValue;
+            //FeatureHitTestResult closestFeauture = null;
+            SCNVector3? closestFeauturePosition = null;
+
+            if (sceneView.Session == null || ARGamePlay.CurrentFrame == null)
+            {
+                return null;
+            }
+            var features = ARGamePlay.CurrentFrame.RawFeaturePoints;
+            if (features == null)
+            {
+                return null;
+            }
+
+            var ray = sceneView.HitTestRayFromScreenPos(point);
+            if (ray == null)
+            {
+                return null;
+            }
+
+            var maxAngleInDeg = Math.Min(coneOpeningAngleInDegrees, 360) / 2.0;
+            var maxAngle = (maxAngleInDeg / 180) * Math.PI;
+
+            foreach (var featurePos in features.Points)
+            {
+                var scnFeaturePos = new SCNVector3(featurePos.X, featurePos.Y, featurePos.Z);
+                var originToFeature = scnFeaturePos - ray.Origin;
+
+                var hitTestResult = ray.Origin + (ray.Direction * (ray.Direction.Dot(originToFeature)));
+                var hitTestResultDistance = (hitTestResult - ray.Origin).LengthFast;
+
+                if (hitTestResultDistance < minDistance || hitTestResultDistance > maxDistance)
+                {
+                    // Skip this feature -- it's too close or too far
+                    continue;
+                }
+
+                var originToFeatureNormalized = originToFeature.Normalized();
+                var angleBetweenRayAndFeature = Math.Acos(ray.Direction.Dot(originToFeatureNormalized));
+
+                if (angleBetweenRayAndFeature > maxAngle)
+                {
+                    // Skip this feature -- it's outside the cone 
+                    continue;
+                }
+
+                if(hitTestResultDistance < minHitTestResultDistance)
+                {
+                    minHitTestResultDistance = hitTestResultDistance;
+                    closestFeauturePosition = hitTestResult;
+                }
+            }
+
+            return closestFeauturePosition;
+        }
