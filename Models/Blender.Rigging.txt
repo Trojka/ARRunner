@@ -36,3 +36,13 @@ Mirroring the bones
 			duplicate the bones
 			scale along x with scale -1
 			move into desired position
+			
+			
+step 01: adding bonestructure
+			https://www.youtube.com/watch?v=Q2MGttB1E7U
+step 02: make sure bones have correct orientation > rotate x in positive direction should be the "natural" rotation
+			https://www.youtube.com/watch?v=MOvxQAKKAM0
+step 03: do weightpainting: attach mesh to bonestructure
+			https://www.youtube.com/watch?v=G3gIN4dJYw4
+			https://www.youtube.com/watch?v=Tl4qTgwQwYw&t=55s
+			
