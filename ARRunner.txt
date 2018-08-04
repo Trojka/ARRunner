@@ -52,8 +52,8 @@ Step 1: Finding the intersection of the line of sight with the ARKit provided pl
 ************************************************************************************
 
 
-## What are the concepts?
-----------------------
+## What are the concepts
+
 It takes ARKit some time to find a plane in the cloud of 3D featurepoints. But it also takes some time to build this cloud: first, good featurepoints need to be found in the camera feed, and then they must be tracked from frame to frame. Eventually, ARKit analysis these found featurepoints to extract a horizontal or vertical plane. All this is done behind the scenes by the ARKit library.
 
 
@@ -290,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNTgxNDQ4NjksNDY4MDE3OTkwXX0=
+eyJoaXN0b3J5IjpbLTIwMzQwMTAwOTgsNDY4MDE3OTkwXX0=
 -->
