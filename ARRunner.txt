@@ -1,5 +1,4 @@
-Introduction
-==========
+# Introduction
 
 There is a lot of interest in AR (Augmented Reality) lately, partially due to Apple incorporating AR capabilities natively in the iOS operating system through the ARKit libraries. Shortly after Apple introduced ARKit, Google introduced ARCode which does basically the same thing.
 
@@ -295,5 +294,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwODAwMzQ4MzAsNDY4MDE3OTkwXX0=
+eyJoaXN0b3J5IjpbLTg3MzE4MDM3Nyw0NjgwMTc5OTBdfQ==
 -->
