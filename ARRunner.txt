@@ -58,15 +58,15 @@ It takes ARKit some time to find a plane in the cloud of 3D featurepoints. But i
 
 
 So, we take a two step approach to finding a good location to place out content and to provide feedback to the user about the process:
-1/ First, from the moment there are featurepoints available, we find the featurepoint closest to our viewing vector, further called the "line-of-sight", and return this feauturepoint. This allows us to inform the user that featurepoints where found, but no plane could be extracted from them already.
-2/ Second, from the moment we find intersections of our line-of-sight vector with planes found by ARKit, we return this intersection. Now the user can point his device on a spot in that plane to place the AR content.
+1. First, from the moment there are featurepoints available, we find the featurepoint closest to our viewing vector, further called the "line-of-sight", and return this feauturepoint. This allows us to inform the user that featurepoints where found, but no plane could be extracted from them already.
+2. Second, from the moment we find intersections of our line-of-sight vector with planes found by ARKit, we return this intersection. Now the user can point his device on a spot in that plane to place the AR content.
 
 
-How is it done in code?
------------------------
+## How is it done in code?
+
 The two step process is implemented in the folowing method of the PlaneFinding class:
 
-
+...
 	public static (SCNVector3? hitPoint, HitType hitType) FindNearestWorldPointToScreenPoint(CGPoint point, ARSCNView sceneView, SCNVector3? pointOnPlane)
 	{
 		var planeHitPosition = HitTestExistingPlanes(point, sceneView);
@@ -290,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwMzQwMTAwOTgsNDY4MDE3OTkwXX0=
+eyJoaXN0b3J5IjpbMTAxMTAyMDY5MSw0NjgwMTc5OTBdfQ==
 -->
