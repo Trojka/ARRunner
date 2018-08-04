@@ -9,8 +9,7 @@ So, what is that “same thing”? Well, they allow you to watch the world throu
 This article will introduce the basic steps necessary to create such an application, a small game, using ARKit and Xamarin.
 
 
-Basics
-
+# Basics
 
 
 ARKit uses a combination of the video from the camera and the phones motion sensors to identify the position of the phone in the world space. This technique is known as visual-inertial odometry.
@@ -19,8 +18,7 @@ ARKit uses a combination of the video from the camera and the phones motion sens
 Basically, through image processing techniques, ARKit finds features in the scene and tracks those features in the video feed. It then uses the motion sensors of the phone to correct this tracking. By tracking the features, ARKit is capable of forming itself an image of what the 3D world around it looks like. And using this information it can find surfaces in the 3D world. It then exposes these surfaces through the ARKit API allowing developers to place content in the 3D world viewed through the camera. To place something on this surface, you find the intersection of the "line of sight", coming out of the phones camera, and this plane.
 
 
-Prepare:
-*******
+## Prepare
 
 == opzetten van een scene om de 3D content te kunnen tonen op een correcte manier in de 3D wereld.==
 
@@ -54,7 +52,7 @@ Step 1: Finding the intersection of the line of sight with the ARKit provided pl
 ************************************************************************************
 
 
-What are the concepts?
+## What are the concepts?
 ----------------------
 It takes ARKit some time to find a plane in the cloud of 3D featurepoints. But it also takes some time to build this cloud: first, good featurepoints need to be found in the camera feed, and then they must be tracked from frame to frame. Eventually, ARKit analysis these found featurepoints to extract a horizontal or vertical plane. All this is done behind the scenes by the ARKit library.
 
@@ -292,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAwMzQzMDMwMiw0NjgwMTc5OTBdfQ==
+eyJoaXN0b3J5IjpbLTExNTgxNDQ4NjksNDY4MDE3OTkwXX0=
 -->
