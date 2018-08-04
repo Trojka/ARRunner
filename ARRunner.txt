@@ -262,7 +262,7 @@ This progress has 4 distinct states:
 <ol>
 <li>ARKit hasn't found anything usefull yet: no featurepoints and no planes</li>
 <li>ARKit has found featurepoints, but no planes</li>
-<li>ARKit has found planes, but they do not intersect with our line of sight.</li>  *** KUNNEN WE HIER OP DIFFERENTIEREN? WETEN WIJ DAT? TE BEKIJKEN IN DE BOVENSTAANDE CODE WAAR DE INTERSECTIE GEZOCHT WORDT !!!***
+<li>ARKit has found planes, but they do not intersect with our line of sight.</li>  ==KUNNEN WE HIER OP DIFFERENTIEREN? WETEN WIJ DAT? TE BEKIJKEN IN DE BOVENSTAANDE CODE WAAR DE INTERSECTIE GEZOCHT WORDT !!!==
 <li>ARKit has found planes which intersect with our line of sight</li>
 </ol>
 
@@ -290,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUxMzQ3MzI2OSw0NjgwMTc5OTBdfQ==
+eyJoaXN0b3J5IjpbMjk2MTkzNDc3LDQ2ODAxNzk5MF19
 -->
