@@ -10,7 +10,7 @@ This article will introduce the basic steps necessary to create such an applicat
 
 
 Basics
-=====
+
 
 
 ARKit uses a combination of the video from the camera and the phones motion sensors to identify the position of the phone in the world space. This technique is known as visual-inertial odometry.
@@ -38,9 +38,7 @@ To be able to display content in the camera view, Apple provides the ARSCNView c
 You can have different types of AR experiences. You choose a certain type of experience through the type of ARConfiguration you provide to the ARSession. The type we'll use here is implemented through the ARWorldTrackingConfiguration class: it provides a 6DOF (degrees of freedom) experience viewed through the back camera.
 
 
-//////
-*MIJN VRAAG: wat is dan het verschil tussen ARSession en ARWorldTrackingConfiguration?*
-//////
+==MIJN VRAAG: wat is dan het verschil tussen ARSession en ARWorldTrackingConfiguration?==
 
 
 Following are the steps taken to place content on a plane found by ARKit:
@@ -294,5 +292,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3OTAxMjc5MjksNDY4MDE3OTkwXX0=
+eyJoaXN0b3J5IjpbMjAwMzQzMDMwMiw0NjgwMTc5OTBdfQ==
 -->
