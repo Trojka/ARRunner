@@ -11,7 +11,7 @@ This article will introduce the basic steps necessary to create such an applicat
 
 
 Basics
-******
+=====
 
 
 ARKit uses a combination of the video from the camera and the phones motion sensors to identify the position of the phone in the world space. This technique is known as visual-inertial odometry.
@@ -22,7 +22,7 @@ Basically, through image processing techniques, ARKit finds features in the scen
 
 Prepare:
 *******
----
+
 -- opzetten van een scene om de 3D content te kunnen tonen op een correcte manier in de 3D wereld.
 
 
@@ -295,5 +295,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDY4MDE3OTkwXX0=
+eyJoaXN0b3J5IjpbNjk0MjU3OTM4LDQ2ODAxNzk5MF19
 -->
