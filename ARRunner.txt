@@ -22,7 +22,7 @@ Basically, through image processing techniques, ARKit finds features in the scen
 Prepare:
 *******
 
--- opzetten van een scene om de 3D content te kunnen tonen op een correcte manier in de 3D wereld.
+== opzetten van een scene om de 3D content te kunnen tonen op een correcte manier in de 3D wereld.==
 
 
 Standard 3D scenes on the iOS platform can be created using the SCNView class.
@@ -294,5 +294,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg3MzE4MDM3Nyw0NjgwMTc5OTBdfQ==
+eyJoaXN0b3J5IjpbLTE3OTAxMjc5MjksNDY4MDE3OTkwXX0=
 -->
