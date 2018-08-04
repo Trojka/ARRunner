@@ -126,7 +126,7 @@ If none are found, we search for intersections with the feature point-cloud:
 As you can see from the method signature, we have an argument specifying the angle of the cone into which we will search the closest point from the feature cloud. This cone starts in the middle of the screen and its axis is along the line of sight. Further arguments are a minimum and maximum from the top of the cone.
 
 
-(afbeelding nog te maken)
+==(afbeelding nog te maken)==
 
 
 We first start by finding the ray perpendicular to the iphones view (and thus in the direction of our line of sight) and whose origin is at the middle if the screen.
@@ -290,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDk0MTY3MTE3LDQ2ODAxNzk5MF19
+eyJoaXN0b3J5IjpbODYyNjkxNTk3LDQ2ODAxNzk5MF19
 -->
