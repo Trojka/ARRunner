@@ -137,7 +137,7 @@ For each featurepoint:
 	Next, we calculate if the feature is within our cone: if not, we discard this feature point.
 	Lastly, we check it this is the closest featurepoint found untill now: if not we discard it.
 	
-	Remember this feaurepoint.
+Remember this feaurepoint.
 	
 In code, this loos like the following:
 
@@ -222,7 +222,7 @@ To calculate the line-of-sight we "unproject" the center of our 2D view in the 3
 Because a picture is worth a thousand words:
 
 
-(afbeelding nog te maken)
+==(afbeelding nog te maken)==
 
 
 In code we get:
@@ -290,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODYyNjkxNTk3LDQ2ODAxNzk5MF19
+eyJoaXN0b3J5IjpbMTUxMzQ3MzI2OSw0NjgwMTc5OTBdfQ==
 -->
