@@ -66,7 +66,7 @@ So, we take a two step approach to finding a good location to place out content 
 
 The two step process is implemented in the folowing method of the PlaneFinding class:
 
-...
+
 	public static (SCNVector3? hitPoint, HitType hitType) FindNearestWorldPointToScreenPoint(CGPoint point, ARSCNView sceneView, SCNVector3? pointOnPlane)
 	{
 		var planeHitPosition = HitTestExistingPlanes(point, sceneView);
@@ -290,5 +290,5 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAxMTAyMDY5MSw0NjgwMTc5OTBdfQ==
+eyJoaXN0b3J5IjpbNDk0MTY3MTE3LDQ2ODAxNzk5MF19
 -->
