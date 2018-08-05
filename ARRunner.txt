@@ -133,9 +133,9 @@ We first start by finding the ray perpendicular to the iphones view (and thus in
 Next we iterate through all the featurepoints in the raw feature cloud we can obain from ARKit.
 For each featurepoint: 
 - We calculate its closest point on the line-of-sight ray. To calculate this distance we use the formula from wikipedia: <a href="https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Another_vector_formulation">Distance from a point to a line - Another vector formulation</a>
-	Get its distance to the origin of the ray and if this distance is within the boundaries, continue. If not, we discard this feature point.
-	Next, we calculate if the feature is within our cone: if not, we discard this feature point.
-	Lastly, we check it this is the closest featurepoint found untill now: if not we discard it.
+- Get its distance to the origin of the ray and if this distance is within the boundaries, continue. If not, we discard this feature point.
+- Next, we calculate if the feature is within our cone: if not, we discard this feature point.
+- Lastly, we check it this is the closest featurepoint found untill now: if not we discard it.
 	
 Remember this feaurepoint.
 	
@@ -286,6 +286,6 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwMzY1MDYxMDksNjgwNDE3Mjg4LDI5Nj
-E5MzQ3Nyw0NjgwMTc5OTBdfQ==
+eyJoaXN0b3J5IjpbMjAzNzM5NTUyOCw2ODA0MTcyODgsMjk2MT
+kzNDc3LDQ2ODAxNzk5MF19
 -->
