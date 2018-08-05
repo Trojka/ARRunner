@@ -279,15 +279,13 @@ Step x: placing and orienting content:
 
 
 
-wat uitleg over IARSCNViewDelegate, zie in ViewController+ARSCNViewDelegate.cs
 
 	
 	
-Step x: placing and orienting content:
-**************************************
+
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUyMDAwMzgzOSwyOTYxOTM0NzcsNDY4MD
-E3OTkwXX0=
+eyJoaXN0b3J5IjpbNjgwNDE3Mjg4LDI5NjE5MzQ3Nyw0NjgwMT
+c5OTBdfQ==
 -->
