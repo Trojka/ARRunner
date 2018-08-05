@@ -278,8 +278,6 @@ Step x: placing and orienting content:
 
 
 
-nes which intersect with our line of sight</li>
-</ol>
 
 wat uitleg over IARSCNViewDelegate, zie in ViewController+ARSCNViewDelegate.cs
 
@@ -290,5 +288,6 @@ Step x: placing and orienting content:
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjk2MTkzNDc3LDQ2ODAxNzk5MF19
+eyJoaXN0b3J5IjpbMTUyMDAwMzgzOSwyOTYxOTM0NzcsNDY4MD
+E3OTkwXX0=
 -->
