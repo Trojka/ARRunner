@@ -277,13 +277,6 @@ Step x: placing and orienting content:
 
 
 
-
-	
-	
-
-
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNzE4MDY3NTMsNjgwNDE3Mjg4LDI5Nj
-E5MzQ3Nyw0NjgwMTc5OTBdfQ==
--->
+References
+**********
+https://docs.microsoft.com/en-us/xamarin/ios/get-started/installation/device-provisioning/free-provisioning?tabs=macos
