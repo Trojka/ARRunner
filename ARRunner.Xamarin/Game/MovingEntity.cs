@@ -24,8 +24,7 @@ namespace aRCCar.Xamarin.Game
 
         public MovingEntity()
             :base (NSUrl.FromString(
-                //NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/rc_car.dae"
-                NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/runner_verylowpoly.dae"
+                NSBundle.MainBundle.BundleUrl.AbsoluteString + $"Models.scnassets/rc_car.dae"
             ))
         {
 
@@ -38,7 +37,7 @@ namespace aRCCar.Xamarin.Game
             _exhaust = SCNParticleSystem.Create("Exhaust", "Models.scnassets");
             _configuredBirthRate = _exhaust.BirthRate;
             _exhaust.BirthRate = 0;
-            //_exhaust.ParticleSize = _modelScale;
+            _exhaust.ParticleSize = _modelScale;
         }
 
 		public override void Load()
@@ -49,7 +48,7 @@ namespace aRCCar.Xamarin.Game
             _wingNode = this.FindChildNode("wing", true);
             _pipeNode = this.FindChildNode("pipe", true);
 
-            //_pipeNode.AddParticleSystem(_exhaust);
+            _pipeNode.AddParticleSystem(_exhaust);
 
             this.Scale = new SCNVector3(_modelScale, _modelScale, _modelScale);
             this.EulerAngles = new SCNVector3(0, (float)Math.PI / 2, 0);
@@ -60,30 +59,30 @@ namespace aRCCar.Xamarin.Game
             get { return _isEnabled; }
             set {
                 _isEnabled = value;
-                //if(_isEnabled)
-                //{
-                //    while (_carBodyNode.Geometry.Materials.Count() != 0)
-                //        _carBodyNode.Geometry.RemoveMaterial(0);
-                //    _carBodyNode.Geometry.InsertMaterial(_colorMaterial, 0);
+                if (_isEnabled)
+                {
+                    while (_carBodyNode.Geometry.Materials.Count() != 0)
+                        _carBodyNode.Geometry.RemoveMaterial(0);
+                    _carBodyNode.Geometry.InsertMaterial(_colorMaterial, 0);
 
-                //    while (_wingNode.Geometry.Materials.Count() != 0)
-                //        _wingNode.Geometry.RemoveMaterial(0);
-                //    _wingNode.Geometry.InsertMaterial(_colorMaterial, 0);
+                    while (_wingNode.Geometry.Materials.Count() != 0)
+                        _wingNode.Geometry.RemoveMaterial(0);
+                    _wingNode.Geometry.InsertMaterial(_colorMaterial, 0);
 
-                //    _exhaust.BirthRate = _configuredBirthRate;
-                //}
-                //else 
-                //{
-                //    while (_carBodyNode.Geometry.Materials.Count() != 0)
-                //        _carBodyNode.Geometry.RemoveMaterial(0);
-                //    _carBodyNode.Geometry.InsertMaterial(_greyMaterial, 0);
+                    _exhaust.BirthRate = _configuredBirthRate;
+                }
+                else
+                {
+                    while (_carBodyNode.Geometry.Materials.Count() != 0)
+                        _carBodyNode.Geometry.RemoveMaterial(0);
+                    _carBodyNode.Geometry.InsertMaterial(_greyMaterial, 0);
 
-                //    while (_wingNode.Geometry.Materials.Count() != 0)
-                //        _wingNode.Geometry.RemoveMaterial(0);
-                //    _wingNode.Geometry.InsertMaterial(_greyMaterial, 0);
+                    while (_wingNode.Geometry.Materials.Count() != 0)
+                        _wingNode.Geometry.RemoveMaterial(0);
+                    _wingNode.Geometry.InsertMaterial(_greyMaterial, 0);
 
-                //    _exhaust.BirthRate = 0;
-                //}
+                    _exhaust.BirthRate = 0;
+                }
 
             }
         }
