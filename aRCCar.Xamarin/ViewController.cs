@@ -92,18 +92,18 @@ namespace aRCCar.Xamarin
             gestureManager.TouchesCancelled(touches, evt);
         }
 
-        [Action("leftclicked:")]
-        void LeftClicked(NSObject sender)
-        {
-            Debug.WriteLine("Left clicked");
-            gamePlay.LeftActuator();
-        }
+        //[Action("leftclicked:")]
+        //void LeftClicked(NSObject sender)
+        //{
+        //    Debug.WriteLine("Left clicked");
+        //    gamePlay.LeftActuator();
+        //}
 
-        [Action("rightclicked:")]
-        void RightClicked(NSObject sender)
-        {
-            Debug.WriteLine("Right clicked");
-            gamePlay.RightActuator();
-        }
+        //[Action("rightclicked:")]
+        //void RightClicked(NSObject sender)
+        //{
+        //    Debug.WriteLine("Right clicked");
+        //    gamePlay.RightActuator();
+        //}
     }
 }

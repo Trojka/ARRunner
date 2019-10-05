@@ -32,14 +32,14 @@ namespace aRCCar.Xamarin.Game
 
         public void TouchesBegan(NSSet touches, UIEvent evt)
         {
-            //Debug.WriteLine("TouchesBegan: " + touches.Count);
+            Debug.WriteLine("TouchesBegan: " + touches.Count);
             if(touches.Count == 1 && _currentTouchType == TouchType.None)
             {
                 _currentTouchType = TouchType.OneFingerTouch;
                 var touch = (UITouch)touches.ElementAt(0);
                 var handle = touch.Handle;
                 var viewTouchPoint = touch.LocationInView(_view);
-                //Debug.WriteLine("TouchesBegan (TouchType.None): " + touches.Count + ", TouchType: " + currentTouchType + ", Handle: " + handle + ", Point: " + viewTouchPoint);
+                Debug.WriteLine("TouchesBegan (TouchType.None): " + touches.Count + ", TouchType: " + _currentTouchType + ", Handle: " + handle + ", Point: " + viewTouchPoint);
 
                 _touchDictionary.Add(handle, viewTouchPoint);
                 _touchList.Add(handle);
@@ -56,7 +56,7 @@ namespace aRCCar.Xamarin.Game
                 var touch = (UITouch)touches.ElementAt(0);
                 var handle = touch.Handle;
                 var viewTouchPoint = touch.LocationInView(_view);
-                //Debug.WriteLine("TouchesBegan: " + touches.Count + ", TouchType.SingleTouch, Handle: " + handle + ", Point: " + viewTouchPoint);
+                Debug.WriteLine("TouchesBegan: " + touches.Count + ", TouchType.SingleTouch, Handle: " + handle + ", Point: " + viewTouchPoint);
                 _touchDictionary.Add(handle, viewTouchPoint);
                 _touchList.Add(handle);
                 if (SingleFingerTouchEvent != null)
@@ -70,7 +70,7 @@ namespace aRCCar.Xamarin.Game
                     var firstViewTouchPoint = _touchDictionary[_touchList[0]];
                     var secondViewTouchPoint = _touchDictionary[_touchList[1]];
 
-                    //Debug.WriteLine("firstViewTouchPoint: " + firstViewTouchPoint.ToString() + ", secondViewTouchPoint:" + secondViewTouchPoint.ToString());
+                    Debug.WriteLine("firstViewTouchPoint: " + firstViewTouchPoint.ToString() + ", secondViewTouchPoint:" + secondViewTouchPoint.ToString());
 
                     var touchData = new TwoFingerTouch(0, firstViewTouchPoint, secondViewTouchPoint, GestureState.Start);
                     TwoFingerTouchEvent(this, new EventArgs<TwoFingerTouch>(touchData));
@@ -117,7 +117,7 @@ namespace aRCCar.Xamarin.Game
                 }
                 _currentTouchType = TouchType.None;
             }
-            //Debug.WriteLine("TouchesBegan: type: " + currentTouchType);
+            Debug.WriteLine("TouchesBegan: type: " + _currentTouchType);
         }
 
         public void TouchesMoved(NSSet touches, UIEvent evt)
@@ -144,10 +144,10 @@ namespace aRCCar.Xamarin.Game
 
         public void TouchesEnded(NSSet touches, UIEvent evt)
         {
-            //Debug.WriteLine("TouchesEnded: " + touches.Count);
+            Debug.WriteLine("TouchesEnded: " + touches.Count);
             if (touches.Count == 1 && _currentTouchType == TouchType.OneFingerTouch)
             {
-                //Debug.WriteLine("TouchesEnded (TouchType.SingleTouch): " + touches.Count);
+                Debug.WriteLine("TouchesEnded (TouchType.SingleTouch): " + touches.Count);
                 if (SingleFingerTouchEvent != null)
                 {
                     var touch = (UITouch)touches.First();
@@ -161,7 +161,7 @@ namespace aRCCar.Xamarin.Game
             {
                 if(TwoFingerTouchEvent != null)
                 {
-                    //Debug.WriteLine("TouchesEnded");
+                    Debug.WriteLine("TouchesEnded");
 
                     var firstViewTouchPoint = _touchDictionary[_touchList[0]];
                     var secondViewTouchPoint = _touchDictionary[_touchList[1]];
@@ -179,13 +179,13 @@ namespace aRCCar.Xamarin.Game
                 _touchDictionary.Remove(handle);
                 _touchList.Remove(handle);
             }
-           //Debug.WriteLine("TouchesEnded: type: " + currentTouchType);
+            Debug.WriteLine("TouchesEnded: type: " + _currentTouchType);
 
         }
 
         public void TouchesCancelled(NSSet touches, UIEvent evt)
         {
-            //Debug.WriteLine("TouchesCancelled: " + touches.Count);
+            Debug.WriteLine("TouchesCancelled: " + touches.Count);
         }
     }
 }
